@@ -195,7 +195,7 @@ footer .hearts{font-size:1.2rem}
       <div class="step-dots" id="wDots"></div>
       <div class="controls">
         <button class="btn btn-ghost" id="wPrev">⏮ السابق</button>
-        <button class="btn btn-yellow" id="wDone">✅ أنجزت الخطوة</button>
+        <button class="btn btn-yellow" id="wDoneBtn">✅ أنجزت الخطوة</button>
         <button class="btn btn-primary" id="wNext">التالي ⏭</button>
       </div>
     </div>
@@ -296,7 +296,7 @@ const WUDU=[
  {e:"👂",n:"مسح الأذنين مرة واحدة",d:"بنفس ماء الرأس: امسح أذنيك من الداخل بالسبابتين ومن الخارج بالإبهامين. مرة واحدة.",duaa:"📿 الأذنان من الرأس فلا تنسَهما يا بطل!",sun:"🌟 سنة: مسح الأذنين بعد الرأس مباشرة."},
  {e:"🦶",n:"غسل القدمين إلى الكعبين 3 مرات",d:"اغسل قدمك اليمنى إلى الكعبين (العظمتين) ثلاثاً مع تخليل الأصابع، ثم اليسرى. ثم قل دعاء ما بعد الوضوء!",duaa:"📿 دعاء بعد الوضوء: «أشهد أن لا إله إلا الله وحده لا شريك له، وأشهد أن محمداً عبده ورسوله، اللهم اجعلني من التوابين واجعلني من المتطهرين»",sun:"🌟 سنة: صلاة ركعتين بعد الوضوء، والاقتصاد في الماء."}
 ];
-let wi=0, wDone=new Set(JSON.parse(localStorage.getItem('wuduDone')||'[]'));
+let wi=0, wDoneSet=new Set(JSON.parse(localStorage.getItem('wuduDone')||'[]'));
 function renderWudu(){
   const s=WUDU[wi];
   wEmoji.textContent=s.e; wName.textContent=(wi+1)+". "+s.n; wDesc.textContent=s.d;
@@ -306,19 +306,22 @@ function renderWudu(){
   wuduBar.style.width=pct+"%"; stepPct.textContent=pct+"%";
   wPrev.disabled=wi===0; wNext.disabled=wi===WUDU.length-1;
   wDots.innerHTML="";
-  WUDU.forEach((_,i)=>{const d=document.createElement("span");d.className="dot"+(wDone.has(i)?" done":"")+(i===wi?" now":"");d.title="خطوة "+(i+1);d.onclick=()=>{wi=i;renderWudu()};wDots.appendChild(d)});
-  wuduDone.textContent=wDone.size;
-  wDone.textContent=wDone.has(wi)?"تمت ✅":"✅ أنجزت الخطوة";
+  WUDU.forEach((_,i)=>{const d=document.createElement("span");d.className="dot"+(wDoneSet.has(i)?" done":"")+(i===wi?" now":"");d.title="خطوة "+(i+1);d.onclick=()=>{wi=i;renderWudu()};wDots.appendChild(d)});
+  wuduDone.textContent=wDoneSet.size;
+  wDoneBtn.textContent=wDoneSet.has(wi)?"تمت ✅":"✅ أنجزت الخطوة";
   save();
 }
 wPrev.onclick=()=>{if(wi>0){wi--;renderWudu();boing()}};
-wNext.onclick=()=>{if(wi<WUDU.length-1){wi++;renderWudu();boing()}};
-wDone.onclick=()=>{
-  wDone.has(wi)?wDone.delete(wi):wDone.add(wi);
-  addStars(wDone.has(wi)?5:-5);
-  if(wDone.size===WUDU.length){celebrate();speak("ممتاز! أتممت الوضوء كاملا يا بطل");}
-  else speak(wDone.has(wi)?"أحسنت!":"لا بأس، حاول مجددا");
+function completeStep(silent){
+  if(!wDoneSet.has(wi)){wDoneSet.add(wi);addStars(5);}
+  if(wDoneSet.size===WUDU.length){celebrate();speak("ممتاز! أتممت الوضوء كاملا يا بطل");}
+  else if(!silent){speak("أحسنت!")}
   renderWudu();
+}
+wNext.onclick=()=>{completeStep(true);if(wi<WUDU.length-1){wi++;boing();renderWudu()}else{boing()}};
+wDoneBtn.onclick=()=>{
+  if(wDoneSet.has(wi)){wDoneSet.delete(wi);addStars(-5);speak("لا بأس، حاول مجددا");renderWudu();}
+  else completeStep(false);
 };
 
 /* ===== الصلوات ===== */
@@ -370,10 +373,10 @@ const QUIZ=[
  {q:"على كم عضو نسجد؟",o:["5 أعضاء","7 أعضاء ✔","3 أعضاء","10 أعضاء"],a:1},
  {q:"ما دعاء ما بعد الوضوء؟",o:["الحمد لله فقط","أشهد أن لا إله إلا الله.. اللهم اجعلني من التوابين والمتطهرين ✔","بسم الله","لا شيء"],a:1}
 ];
-let qi=0,qScore=Number(localStorage.getItem('stars')||0);
+let qi=0,score=Number(localStorage.getItem('stars')||0);
 function renderQuiz(){
   if(qi>=QUIZ.length){
-    const s=qScore;
+    const s=score;
     qFinal.textContent=s>=80?"🎉 مذهل! أنت بطل الأبطال! 🏆⭐":s>=50?"👏 أحسنت! عمل رائع يا بطل! 🌟":"💪 جيد! راجع الدروس وحاول مجدداً يا بطل! 📚";
     if(s>=50)celebrate();
     qNext.disabled=true;return;
@@ -382,9 +385,9 @@ function renderQuiz(){
   qNum.textContent=qi+1; qScoreEl(); qText.textContent=(qi+1)+". "+Q.q;
   qOpts.innerHTML="";qNext.disabled=true;
   Q.o.forEach((t,i)=>{const b=document.createElement("button");b.className="opt";b.textContent=t.replace(" ✔","");b.onclick=()=>checkQuiz(i,b);qOpts.appendChild(b)});
-  qStars.textContent=qi===0?"⭐⭐⭐":qScore>=70?"🌟🌟🌟":qScore>=40?"🌟🌟⭐":"🌟⭐⭐";
+  qStars.textContent=qi===0?"⭐⭐⭐":score>=70?"🌟🌟🌟":score>=40?"🌟🌟⭐":"🌟⭐⭐";
 }
-function qScoreEl(){qScore.textContent=qScore;myStars.textContent=qScore;certStars.textContent=qScore;localStorage.setItem('stars',qScore)}
+function qScoreEl(){document.getElementById("qScore").textContent=score;myStars.textContent=score;certStars.textContent=score;localStorage.setItem('stars',score)}
 function checkQuiz(i,btn){
   const Q=QUIZ[qi];
   const btns=[...qOpts.children];
@@ -397,8 +400,8 @@ qNext.onclick=()=>{qi++;qFinal.textContent="";renderQuiz()};
 qRestart.onclick=()=>{qi=0;qFinal.textContent="";renderQuiz();speak("لنلعب من جديد")};
 
 /* ===== نجوم + شهادة ===== */
-function addStars(n){qScore=Math.max(0,qScore+n);qScoreEl()}
-function save(){localStorage.setItem('wuduDone',JSON.stringify([...wDone]));qScoreEl()}
+function addStars(n){score=Math.max(0,score+n);qScoreEl()}
+function save(){localStorage.setItem('wuduDone',JSON.stringify([...wDoneSet]));qScoreEl()}
 kidName.value=localStorage.getItem('kid')||"";
 certDate.textContent=new Date().toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'});
 makeCert.onclick=()=>{
