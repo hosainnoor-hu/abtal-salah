@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌙 أبطال الطهارة والصلاة | تعلّم الوضوء والصلاة بمرح</title>
+<meta name="description" content="موقع تفاعلي مرح لتعليم الأطفال والناشئة الوضوء والصلاة خطوة بخطوة">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#29b6f6; --sky-d:#0288d1; --sky-l:#e1f5fe;
+  --green:#43a047; --green-d:#2e7d32; --green-l:#e8f5e9;
+  --yellow:#ffb300; --yellow-l:#fff8e1; --yellow-d:#f57f17;
+  --pink:#ec407a; --purple:#7e57c2;
+  --ink:#23404d; --muted:#5d7a88;
+  --card:#ffffff; --bg:#f0f9ff;
+  --radius:22px; --shadow:0 10px 30px rgba(2,136,209,.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; font-family:'Cairo','Tajawal',system-ui,sans-serif;
+  background:
+    radial-gradient(600px 300px at 90% 0%, #fff3c4 0%, transparent 60%),
+    radial-gradient(700px 350px at 5% 10%, #d8f3ff 0%, transparent 60%),
+    radial-gradient(700px 400px at 50% 100%, #d9f5e3 0%, transparent 60%),
+    var(--bg);
+  color:var(--ink); line-height:1.9; overflow-x:hidden;
+}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5}
+.container{max-width:1080px;margin:0 auto;padding:0 16px;position:relative;z-index:1}
+/* header */
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(255,255,255,.85);border-bottom:3px solid #b3e5fc}
+.nav{display:flex;align-items:center;gap:10px;padding:10px 16px;max-width:1080px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.15rem;color:var(--sky-d)}
+.logo-badge{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,var(--sky),var(--green));display:grid;place-items:center;font-size:1.6rem;box-shadow:var(--shadow);animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+.links{display:flex;gap:8px;margin-inline-start:auto;overflow-x:auto;scrollbar-width:none}
+.links::-webkit-scrollbar{display:none}
+.links a{white-space:nowrap;text-decoration:none;color:var(--ink);font-weight:700;font-size:.92rem;background:#fff;border:2px solid #e1f5fe;padding:7px 14px;border-radius:999px;transition:.2s}
+.links a:hover,.links a.active{background:var(--sky);color:#fff;border-color:var(--sky);transform:translateY(-2px)}
+.burger{display:none}
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:center;padding:34px 0 10px}
+@media(max-width:860px){.hero{grid-template-columns:1fr;text-align:center}.links{display:none}.burger{display:inline-flex}}
+.hero-card{background:linear-gradient(135deg,#ffffff 0%,#e1f5fe 60%,#e8f5e9 100%);border:3px solid #fff;border-radius:28px;padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero-card h1{margin:.2em 0;font-size:clamp(1.6rem,4.5vw,2.6rem);line-height:1.4;color:#0d47a1}
+.hero-card h1 span{background:linear-gradient(90deg,#ff8f00,#ec407a,#7e57c2,#0288d1);-webkit-background-clip:text;background-clip:text;color:transparent}
+.badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px dashed var(--yellow);color:#7a5200;font-weight:800;padding:6px 14px;border-radius:999px;font-size:.9rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:1.05rem;padding:13px 24px;border-radius:999px;transition:.2s;text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,var(--sky-d),var(--sky));color:#fff;box-shadow:0 8px 20px rgba(2,136,209,.35)}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02)}
+.btn-green{background:linear-gradient(135deg,var(--green-d),#66bb6a);color:#fff;box-shadow:0 8px 20px rgba(46,125,50,.3)}
+.btn-yellow{background:linear-gradient(135deg,#ff8f00,var(--yellow));color:#fff;box-shadow:0 8px 20px rgba(255,143,0,.35)}
+.btn-ghost{background:#fff;border:2px solid #b3e5fc;color:var(--sky-d)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.hero-art{display:grid;place-items:center}
+.mosque{font-size:clamp(6rem,18vw,10rem);filter:drop-shadow(0 12px 18px rgba(0,0,0,.15));animation:float 4s ease-in-out infinite}
+.kid-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.kid-stats div{background:#fff;border-radius:16px;padding:8px 14px;font-weight:800;border:2px solid #e1f5fe;box-shadow:var(--shadow);font-size:.95rem}
+/* sections */
+section{margin:30px 0}
+.sec-head{text-align:center;margin-bottom:16px}
+.sec-head h2{margin:.2em 0;font-size:clamp(1.4rem,4vw,2rem);color:#0d47a1}
+.sec-head p{color:var(--muted);margin:0 auto;max-width:640px;font-weight:600}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:3px solid #fff;padding:22px}
+/* wudu */
+.progress-wrap{background:#e1f5fe;border-radius:999px;height:16px;overflow:hidden;margin:12px 0;border:2px solid #fff}
+.progress{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--sky),var(--yellow));border-radius:999px;transition:width .4s ease}
+.stepper{display:grid;grid-template-columns:80px 1fr;gap:14px;align-items:start}
+@media(max-width:600px){.stepper{grid-template-columns:1fr;text-align:center}}
+.step-emoji{width:80px;height:80px;border-radius:24px;display:grid;place-items:center;font-size:2.6rem;background:linear-gradient(135deg,var(--sky-l),var(--green-l));border:3px solid #fff;box-shadow:var(--shadow);margin:0 auto}
+.step-dots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:12px 0}
+.dot{width:14px;height:14px;border-radius:50%;background:#cfd8dc;transition:.2s;cursor:pointer;border:2px solid #fff}
+.dot.done{background:var(--green)} .dot.now{background:var(--yellow);transform:scale(1.35);box-shadow:0 0 0 4px #fff3c4}
+.duaa{background:var(--green-l);border:2px dashed var(--green);border-radius:16px;padding:12px 14px;margin-top:12px;font-weight:700}
+.sunnah{background:var(--yellow-l);border:2px dashed var(--yellow);border-radius:16px;padding:12px 14px;margin-top:10px}
+.controls{display:flex;gap:10px;justify-content:space-between;margin-top:16px;flex-wrap:wrap}
+/* prayer */
+.prayer-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:14px 0}
+.prayer-tabs button{border:2px solid #b3e5fc;background:#fff;border-radius:999px;padding:9px 16px;font-family:inherit;font-weight:800;cursor:pointer;transition:.2s;font-size:.95rem}
+.prayer-tabs button.on{background:linear-gradient(135deg,#0d47a1,var(--sky-d));color:#fff;border-color:#0d47a1;transform:scale(1.05)}
+.rakat-info{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.rakat-info span{background:#fff;border:2px solid #c8e6c9;border-radius:999px;padding:6px 14px;font-weight:800;color:var(--green-d)}
+.moves{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+.move{background:linear-gradient(180deg,#fff,#f1f8e9);border:2px solid #dcedc8;border-radius:18px;padding:14px;text-align:center;cursor:pointer;transition:.2s}
+.move:hover{transform:translateY(-4px)}
+.move.on{border-color:var(--green);background:linear-gradient(180deg,#fff,#c8e6c9);box-shadow:0 8px 20px rgba(46,125,50,.2)}
+.move .e{font-size:2.4rem}
+.move h4{margin:6px 0;color:var(--green-d)}
+.move p{font-size:.9rem;color:var(--ink);margin:0}
+.move .say{background:#fff;border-radius:12px;padding:8px;margin-top:8px;font-weight:700;color:#0d47a1;border:1px dashed var(--sky)}
+.move-detail{background:#e8f5e9;border-radius:18px;padding:16px;margin-top:12px;border:2px solid #a5d6a7;min-height:90px}
+/* mistakes */
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.vs-grid{grid-template-columns:1fr}}
+.vs{border-radius:18px;padding:16px;border:3px solid}
+.vs.good{background:#e8f5e9;border-color:#66bb6a}
+.vs.bad{background:#ffebee;border-color:#ef9a9a}
+.vs h3{margin:0 0 8px}
+.mistake-card{background:#fff;border-radius:14px;padding:10px 12px;margin:8px 0;border:2px solid #eee;font-weight:600}
+.mistake-card b{color:var(--green-d)} .vs.bad .mistake-card b{color:#c62828}
+.attention{background:linear-gradient(135deg,#fff3e0,#fff8e1);border:3px dashed var(--yellow);border-radius:18px;padding:14px;text-align:center;font-weight:800;color:#6d4c00;margin-top:14px}
+/* quiz */
+.quiz-box{text-align:center}
+.opts{display:grid;gap:10px;margin:14px 0}
+.opt{background:#fff;border:3px solid #e1f5fe;border-radius:16px;padding:12px;font-weight:800;cursor:pointer;transition:.2s;font-size:1rem;font-family:inherit}
+.opt:hover{border-color:var(--sky);transform:scale(1.01)}
+.opt.ok{background:#c8e6c9;border-color:var(--green)} .opt.no{background:#ffcdd2;border-color:#e57373}
+.score-stars{font-size:2rem;letter-spacing:4px}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:99}
+/* cert */
+.cert-form{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0}
+.cert-form input{font-family:inherit;font-size:1.1rem;font-weight:700;padding:12px 16px;border-radius:999px;border:3px solid #b3e5fc;min-width:min(320px,90vw);text-align:center}
+.certificate{background:linear-gradient(180deg,#fffdf3,#fff);border:6px double var(--yellow);border-radius:24px;padding:28px;text-align:center;position:relative;overflow:hidden;margin-top:14px}
+.certificate::before{content:"🌙 ⭐ 🕌 ⭐ 🌙";display:block;font-size:1.4rem;letter-spacing:8px}
+.certificate h2{color:#0d47a1;font-size:1.8rem;margin:8px 0}
+.cert-name{font-size:2rem;font-weight:900;color:#e65100;background:var(--yellow-l);display:inline-block;padding:4px 26px;border-radius:999px;border:3px dashed var(--yellow);margin:8px 0}
+footer{text-align:center;color:var(--muted);padding:26px 10px 40px;font-weight:600}
+footer .hearts{font-size:1.2rem}
+.top-btn{position:fixed;bottom:16px;left:16px;z-index:60;width:52px;height:52px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--sky-d),var(--purple));color:#fff;font-size:1.4rem;cursor:pointer;box-shadow:var(--shadow);display:none}
+@media print{.no-print{display:none!important}body{background:#fff}.certificate{box-shadow:none}}
+.mobile-nav{position:fixed;bottom:0;right:0;left:0;z-index:55;background:rgba(255,255,255,.96);border-top:3px solid #b3e5fc;display:none;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom))}
+.mobile-nav a{text-decoration:none;font-weight:800;font-size:.78rem;color:var(--sky-d);display:flex;flex-direction:column;align-items:center;gap:2px}
+@media(max-width:860px){.mobile-nav{display:flex}body{padding-bottom:70px}}
+.ticker{background:linear-gradient(90deg,#0d47a1,#0288d1,#43a047);color:#fff;text-align:center;font-weight:800;padding:8px;font-size:.95rem}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="stars" id="stars"></div>
+<div class="ticker">✨ أهلاً بك يا بطل! توضأ وصلِّ تكسب حسنات وتضيء قلبك 🌟</div>
+
+<header>
+  <nav class="nav">
+    <div class="logo"><span class="logo-badge">🕌</span> أبطال الصلاة</div>
+    <div class="links" id="links">
+      <a href="#wudu">💧 الوضوء</a>
+      <a href="#prayer">🙏 الصلاة</a>
+      <a href="#mistakes">⚠️ انتبه يا بطل</a>
+      <a href="#quiz">🏆 ملعب الأبطال</a>
+      <a href="#cert">🎓 شهادتي</a>
+    </div>
+    <button class="btn btn-ghost burger" onclick="document.getElementById('mnav').scrollIntoView()">☰</button>
+  </nav>
+</header>
+
+<div class="container">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-card">
+      <span class="badge">🌈 للأطفال والناشئة • تعلّم بمرح</span>
+      <h1>هيا نتعلم <span>الوضوء والصلاة</span> خطوة بخطوة يا بطل! 🎉</h1>
+      <p style="color:var(--muted);font-weight:700;margin:0">بطاقات ملوّنة، أصوات تشجيع، اختبار ممتع، وشهادة باسمك في النهاية. جاهز للمغامرة؟</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:start">
+        <a class="btn btn-primary" href="#wudu">💧 ابدأ الوضوء</a>
+        <a class="btn btn-green" href="#prayer">🙏 تعلّم الصلاة</a>
+        <a class="btn btn-yellow" href="#quiz">🏆 اختبر نفسك</a>
+      </div>
+      <div class="kid-stats">
+        <div>💧 <span id="wuduDone">0</span>/9 خطوات وضوء</div>
+        <div>🙏 <span id="prayerDone">0</span>/5 صلوات استكشفتها</div>
+        <div>⭐ نقاطي: <span id="myStars">0</span></div>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div>
+        <div class="mosque">🕌</div>
+        <div style="text-align:center;font-weight:900;color:var(--sky-d);background:#fff;border-radius:999px;padding:6px 18px;border:2px solid #b3e5fc;box-shadow:var(--shadow)">🧒 أنا بطل الصلاة! 👧</div>
+        <div style="text-align:center;font-size:2rem;margin-top:6px">💧 ✨ 🙏 ✨ 📿</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WUDU -->
+  <section id="wudu">
+    <div class="sec-head"><h2>💧 رحلة الوضوء خطوة بخطوة</h2><p>اضغط «التالي» وتعلّم كل خطوة مع الذكر والسنة. أكمل كل الخطوات لتكسب نجمة! ⭐</p></div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <strong id="stepTitle">الخطوة 1 من 9</strong>
+        <strong style="color:var(--green-d)">🌟 <span id="stepPct">0%</span></strong>
+      </div>
+      <div class="progress-wrap"><div class="progress" id="wuduBar"></div></div>
+      <div class="stepper">
+        <div class="step-emoji" id="wEmoji">🤲</div>
+        <div>
+          <h3 id="wName" style="margin:0;color:#0d47a1;font-size:1.35rem"></h3>
+          <p id="wDesc" style="margin:6px 0;font-weight:600"></p>
+          <div class="duaa" id="wDuaa"></div>
+          <div class="sunnah" id="wSunnah"></div>
+        </div>
+      </div>
+      <div class="step-dots" id="wDots"></div>
+      <div class="controls">
+        <button class="btn btn-ghost" id="wPrev">⏮ السابق</button>
+        <button class="btn btn-yellow" id="wDone">✅ أنجزت الخطوة</button>
+        <button class="btn btn-primary" id="wNext">التالي ⏭</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRAYER -->
+  <section id="prayer">
+    <div class="sec-head"><h2>🙏 محاكاة الصلوات الخمس</h2><p>اختر الصلاة، اعرف عدد ركعاتها، ثم اضغط على كل حركة لتتعلم ماذا تقول فيها.</p></div>
+    <div class="card">
+      <div class="prayer-tabs" id="prayerTabs"></div>
+      <div class="rakat-info" id="rakatInfo"></div>
+      <div style="text-align:center;background:var(--sky-l);border-radius:16px;padding:10px;font-weight:800;color:#0d47a1" id="prayerTime"></div>
+      <div class="moves" id="moves"></div>
+      <div class="move-detail" id="moveDetail">👆 اضغط على أي حركة (مثل الركوع أو السجود) لتظهر لك التفاصيل وما يُقال فيها هنا.</div>
+    </div>
+  </section>
+
+  <!-- MISTAKES -->
+  <section id="mistakes">
+    <div class="sec-head"><h2>⚠️ انتبه يا بطل! صح ✅ مقابل خطأ ❌</h2><p>نتعلم من الأخطاء بحب وبدون خجل. كن بطلاً وتجنّب هذه الأخطاء!</p></div>
+    <div class="card">
+      <div class="vs-grid">
+        <div class="vs good"><h3>✅ افعل يا بطل! 🌟</h3><div id="goodList"></div></div>
+        <div class="vs bad"><h3>❌ تجنّب يا بطل! 🙈</h3><div id="badList"></div></div>
+      </div>
+      <div class="attention">💛 تذكّر يا بطل: الله يحب المتطهرين الخاشعين.. <br>«إن الله يحب التوابين ويحب المتطهرين» 🤍</div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <div class="sec-head"><h2>🏆 ملعب الأبطال: اختبر معلوماتك</h2><p>10 أسئلة ممتعة. أجب صح واجمع النجوم وفجّر الاحتفال! 🎊</p></div>
+    <div class="card quiz-box">
+      <div class="score-stars" id="qStars">⭐⭐⭐</div>
+      <h3 id="qText" style="color:#0d47a1"></h3>
+      <div class="opts" id="qOpts"></div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <span class="btn btn-ghost" style="cursor:default">السؤال <b id="qNum">1</b> / 10 • النقاط: <b id="qScore">0</b></span>
+        <button class="btn btn-green" id="qNext" disabled>السؤال التالي ⏭</button>
+        <button class="btn btn-yellow" id="qRestart">🔄 العب من جديد</button>
+      </div>
+      <div id="qFinal" style="margin-top:12px;font-weight:900;font-size:1.2rem;color:var(--green-d)"></div>
+    </div>
+  </section>
+
+  <!-- CERT -->
+  <section id="cert">
+    <div class="sec-head"><h2>🎓 لوحة الإنجاز وشهادتي</h2><p>اكتب اسمك الجميل واضغط الزر لتظهر شهادة البطل باسمك. يمكنك طباعتها وتعليقها! 🖨️</p></div>
+    <div class="card no-print">
+      <div class="cert-form">
+        <input id="kidName" placeholder="اكتب اسمك يا بطل.. مثال: حسين البطل 🌟" maxlength="40">
+        <button class="btn btn-primary" id="makeCert">🎨 إصدار الشهادة</button>
+        <button class="btn btn-ghost" onclick="window.print()">🖨️ طباعة الشهادة</button>
+      </div>
+      <div style="text-align:center;font-weight:700;color:var(--muted)">إنجازك يُحفظ تلقائياً في متصفحك حتى لو أغلقت الصفحة 💾</div>
+    </div>
+    <div class="certificate" id="certificate">
+      <div style="font-weight:800;color:var(--yellow-d)">بسم الله الرحمن الرحيم</div>
+      <h2>🏆 شهادة بطل الطهارة والصلاة 🏆</h2>
+      <p style="margin:4px">نشهد بأن البطل / البطلة</p>
+      <div class="cert-name" id="certName">اسم البطل 🌟</div>
+      <p>قد أتمّ بنجاح تعلّم <b>الوضوء والصلاة</b> بتفوق وأخلاق جميلة<br>بتاريخ: <b id="certDate"></b></p>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:14px;font-weight:800">
+        <span>⭐ النجوم: <span id="certStars">0</span></span>
+        <span>🕌 أبطال الصلاة</span>
+        <span>✅ التقدير: ممتاز</span>
+      </div>
+      <div style="font-size:2rem;margin-top:8px">🌙 ⭐ 🕌 ⭐ 🌙</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="hearts">💧 🕌 🙏 🌙 ⭐</div>
+    صُنع بحب للأطفال والناشئة • تعلّم الوضوء والصلاة بمرح • نسأل الله القبول 🤲
+    <br><small>ملف واحد يعمل بدون إنترنت (بعد أول تحميل للخط) • جاهز للنشر على GitHub Pages</small>
+  </footer>
+</div>
+
+<nav class="mobile-nav" id="mnav">
+  <a href="#wudu">💧<span>الوضوء</span></a>
+  <a href="#prayer">🙏<span>الصلاة</span></a>
+  <a href="#mistakes">⚠️<span>انتبه</span></a>
+  <a href="#quiz">🏆<span>العب</span></a>
+  <a href="#cert">🎓<span>شهادتي</span></a>
+</nav>
+<button class="top-btn" id="topBtn" onclick="scrollTo({top:0,behavior:'smooth'})">⬆️</button>
+
+<script>
+/* ===== بيانات الوضوء ===== */
+const WUDU=[
+ {e:"🤲",n:"النية والتسمية",d:"انْوِ بقلبك أنك تتوضأ للصلاة، وقل: بسم الله. النية محلها القلب ولا نتلفظ بها.",duaa:"📿 الذكر: «بسم الله»",sun:"🌟 سنة: استخدم السواك قبل الوضوء فهو مطهرة للفم."},
+ {e:"🖐️",n:"غسل الكفين 3 مرات",d:"اغسل كفيك إلى الرسغين ثلاث مرات، وخلّل بين أصابعك، وابدأ باليد اليمنى.",duaa:"📿 الذكر: «بسم الله» مستمر في قلبك",sun:"🌟 سنة: الغسل ثلاثاً والتيامن (البدء باليمين)."},
+ {e:"👄",n:"المضمضة 3 مرات",d:"خذ ماء بيدك اليمنى، تمضمض به (حرّكه في فمك) ثم اخرجه. ثلاث مرات.",duaa:"📿 تذكّر: نظافة الفم من الإيمان",sun:"🌟 سنة: المبالغة في المضمضة إلا إذا كنت صائماً."},
+ {e:"👃",n:"الاستنشاق والاستنثار 3 مرات",d:"اسحب الماء بأنفك بلطف بيدك اليمنى ثم اخرجه بيدك اليسرى. ثلاث مرات لتنظيف الأنف.",duaa:"📿 نظافة تجعلك منشـرحاً ومنتعشاً!",sun:"🌟 سنة: المبالغة في الاستنشاق لغير الصائم."},
+ {e:"😊",n:"غسل الوجه 3 مرات",d:"اغسل وجهك كاملاً من أعلى الجبهة (منبت الشعر) إلى أسفل الذقن، ومن الأذن إلى الأذن. ثلاث مرات.",duaa:"📿 دعاء جميل: «اللهم بيّض وجهي يوم تبيضّ الوجوه»",sun:"🌟 سنة: تخليل اللحية الخفيفة بالماء."},
+ {e:"💪",n:"غسل الذراعين إلى المرفقين 3 مرات",d:"اغسل يدك اليمنى من أطراف الأصابع إلى المرفق (الكوع) ثلاثاً، ثم اليسرى مثلها. وتأكد أن الماء وصل كل مكان!",duaa:"📿 دعاء: «اللهم أعطني كتابي بيميني»",sun:"🌟 سنة: إطالة الغرة والتحجيل (زيادة قليلة فوق المرفق)."},
+ {e:"🧒",n:"مسح الرأس مرة واحدة",d:"بلّل يديك وامسح رأسك كله من الأمام إلى الخلف ثم ارجع إلى الأمام. مرة واحدة فقط.",duaa:"📿 لا تنسَ: المسح يكون بالماء فقط دون إسراف",sun:"🌟 سنة: مسح الرأس كله ذهاباً وإياباً."},
+ {e:"👂",n:"مسح الأذنين مرة واحدة",d:"بنفس ماء الرأس: امسح أذنيك من الداخل بالسبابتين ومن الخارج بالإبهامين. مرة واحدة.",duaa:"📿 الأذنان من الرأس فلا تنسَهما يا بطل!",sun:"🌟 سنة: مسح الأذنين بعد الرأس مباشرة."},
+ {e:"🦶",n:"غسل القدمين إلى الكعبين 3 مرات",d:"اغسل قدمك اليمنى إلى الكعبين (العظمتين) ثلاثاً مع تخليل الأصابع، ثم اليسرى. ثم قل دعاء ما بعد الوضوء!",duaa:"📿 دعاء بعد الوضوء: «أشهد أن لا إله إلا الله وحده لا شريك له، وأشهد أن محمداً عبده ورسوله، اللهم اجعلني من التوابين واجعلني من المتطهرين»",sun:"🌟 سنة: صلاة ركعتين بعد الوضوء، والاقتصاد في الماء."}
+];
+let wi=0, wDone=new Set(JSON.parse(localStorage.getItem('wuduDone')||'[]'));
+function renderWudu(){
+  const s=WUDU[wi];
+  wEmoji.textContent=s.e; wName.textContent=(wi+1)+". "+s.n; wDesc.textContent=s.d;
+  wDuaa.textContent=s.duaa; wSunnah.textContent=s.sun;
+  stepTitle.textContent=`الخطوة ${wi+1} من ${WUDU.length}`;
+  const pct=Math.round(((wi+1)/WUDU.length)*100);
+  wuduBar.style.width=pct+"%"; stepPct.textContent=pct+"%";
+  wPrev.disabled=wi===0; wNext.disabled=wi===WUDU.length-1;
+  wDots.innerHTML="";
+  WUDU.forEach((_,i)=>{const d=document.createElement("span");d.className="dot"+(wDone.has(i)?" done":"")+(i===wi?" now":"");d.title="خطوة "+(i+1);d.onclick=()=>{wi=i;renderWudu()};wDots.appendChild(d)});
+  wuduDone.textContent=wDone.size;
+  wDone.textContent=wDone.has(wi)?"تمت ✅":"✅ أنجزت الخطوة";
+  save();
+}
+wPrev.onclick=()=>{if(wi>0){wi--;renderWudu();boing()}};
+wNext.onclick=()=>{if(wi<WUDU.length-1){wi++;renderWudu();boing()}};
+wDone.onclick=()=>{
+  wDone.has(wi)?wDone.delete(wi):wDone.add(wi);
+  addStars(wDone.has(wi)?5:-5);
+  if(wDone.size===WUDU.length){celebrate();speak("ممتاز! أتممت الوضوء كاملا يا بطل");}
+  else speak(wDone.has(wi)?"أحسنت!":"لا بأس، حاول مجددا");
+  renderWudu();
+};
+
+/* ===== الصلوات ===== */
+const PRAYERS=[
+ {n:"الفجر",e:"🌅",r:"ركعتان",info:["فرض: 2","سنة قبلها: 2","وقتها: من الفجر للشروق"],time:"وقتها: من طلوع الفجر الصادق إلى شروق الشمس ☀️"},
+ {n:"الظهر",e:"☀️",r:"4 ركعات",info:["فرض: 4","سنة قبلها: 4 وبعدها: 2","وقتها: بعد الزوال"],time:"وقتها: من زوال الشمس (وسط النهار) إلى دخول العصر 🕛"},
+ {n:"العصر",e:"🌤️",r:"4 ركعات",info:["فرض: 4","وقتها: بعد الظهر للمغرب"],time:"وقتها: من بعد الظهر حتى غروب الشمس 🌇"},
+ {n:"المغرب",e:"🌇",r:"3 ركعات",info:["فرض: 3","سنة بعدها: 2","وقتها: بعد الغروب"],time:"وقتها: من غروب الشمس حتى غياب الشفق الأحمر 🌆"},
+ {n:"العشاء",e:"🌙",r:"4 ركعات",info:["فرض: 4","سنة بعدها: 2 + الوتر","وقتها: ليلاً"],time:"وقتها: من غياب الشفق حتى منتصف الليل 🌌"}
+];
+const MOVES=[
+ {e:"🙌",n:"تكبيرة الإحرام",say:"«الله أكبر»",d:"ارفع يديك بجانب أذنيك وقل: الله أكبر. ثم ضع يدك اليمنى على اليسرى على صدرك. بهذا دخلت الصلاة فلا تتكلم ولا تلتفت."},
+ {e:"🧍",n:"القيام والقراءة",say:"الفاتحة + سورة قصيرة",d:"اقرأ دعاء الاستفتاح سراً: «سبحانك اللهم وبحمدك..»، ثم الفاتحة: «الحمد لله رب العالمين..» ثم سورة قصيرة مثل الإخلاص أو الكوثر."},
+ {e:"🙇",n:"الركوع",say:"«سبحان ربي العظيم» 3 مرات",d:"انحنِ وضع يديك على ركبتيك وظهرك مستوٍ، وقل: سبحان ربي العظيم (3 مرات). اطمئن ولا تستعجل!"},
+ {e:"🧍‍♂️",n:"الرفع من الركوع",say:"«سمع الله لمن حمده، ربنا لك الحمد»",d:"اعتدل قائماً وارفع يديك وقل: سمع الله لمن حمده، ربنا ولك الحمد حمداً كثيراً طيباً."},
+ {e:"🧎",n:"السجود",say:"«سبحان ربي الأعلى» 3 مرات",d:"اسجد على 7 أعضاء: الجبهة والأنف، اليدين، الركبتين، وأطراف القدمين. وقل: سبحان ربي الأعلى 3 مرات، وادعُ بما تحب فأنت قريب من الله!"},
+ {e:"🧎‍♂️",n:"الجلسة بين السجدتين",say:"«رب اغفر لي» 3 مرات",d:"اجلس مطمئناً وقل: رب اغفر لي وارحمني واهدني وارزقني. ثم اسجد السجدة الثانية مثل الأولى."},
+ {e:"🪑",n:"التشهد والسلام",say:"التحيات + السلام عليكم",d:"في آخر الصلاة اجلس واقرأ التحيات والصلاة الإبراهيمية، ثم التفت يميناً: السلام عليكم ورحمة الله، ويساراً مثلها. 🎉 تقبل الله!"}
+];
+let pi=0, seenPrayers=new Set(JSON.parse(localStorage.getItem('seenP')||'[]'));
+function renderPrayers(){
+  prayerTabs.innerHTML="";
+  PRAYERS.forEach((p,i)=>{const b=document.createElement("button");b.textContent=`${p.e} ${p.n}`;b.className=i===pi?"on":"";b.onclick=()=>{pi=i;seenPrayers.add(i);boing();renderPrayers()};prayerTabs.appendChild(b)});
+  const p=PRAYERS[pi];
+  rakatInfo.innerHTML=`<span>🕌 صلاة ${p.n}</span><span>🔢 ${p.r}</span>`+p.info.map(x=>`<span>📌 ${x}</span>`).join("");
+  prayerTime.textContent="⏰ "+p.time;
+  moves.innerHTML="";
+  MOVES.forEach((m,i)=>{const d=document.createElement("div");d.className="move";d.innerHTML=`<div class="e">${m.e}</div><h4>${i+1}. ${m.n}</h4><p>${m.say}</p>`;d.onclick=()=>{document.querySelectorAll('.move').forEach(x=>x.classList.remove('on'));d.classList.add('on');moveDetail.innerHTML=`<b style="color:#2e7d32;font-size:1.15rem">${m.e} ${m.n}</b><br>${m.d}<div class="say" style="background:#fff;border-radius:12px;padding:8px;margin-top:8px;font-weight:800;color:#0d47a1;border:1px dashed #29b6f6">📿 تقول: ${m.say}</div>`;boing()};moves.appendChild(d)});
+  prayerDone.textContent=seenPrayers.size;
+  localStorage.setItem('seenP',JSON.stringify([...seenPrayers]));
+}
+
+/* ===== أخطاء شائعة ===== */
+const GOOD=["💧 إسباغ الوضوء: إيصال الماء لكل عضو كاملاً","🙌 الطمأنينة في كل حركة وعدم الاستعجال","👀 النظر إلى موضع السجود بخشوع","🤫 عدم الكلام والضحك أثناء الصلاة","🧦 غسل الكعبين والعقبين جيداً بالماء","🕌 الصلاة في وقتها أول الوقت","🧼 نظافة الجسم والملابس والمكان"];
+const BAD=["🏃 السرعة الشديدة ونقر الصلاة كنقر الديك","💧 ترك جزء جاف في الوجه أو اليد أو القدم","👀 الالتفات واللعب والحركة الكثيرة","📱 الانشغال بالجوال أو التلفاز أثناء الصلاة","😴 التثاؤب بصوت عالٍ دون تغطية الفم","🗣️ الضحك والكلام أثناء الصلاة","⏰ تأخير الصلاة عن وقتها بدون عذر"];
+goodList.innerHTML=GOOD.map(g=>`<div class="mistake-card">🌟 <b>صح:</b> ${g}</div>`).join("");
+badList.innerHTML=BAD.map(b=>`<div class="mistake-card">🙈 <b>خطأ:</b> ${b}</div>`).join("");
+
+/* ===== الكويز ===== */
+const QUIZ=[
+ {q:"كم عدد الصلوات المفروضة في اليوم؟",o:["3 صلوات","5 صلوات ✔","7 صلوات","صلاة واحدة"],a:1},
+ {q:"كم عدد ركعات صلاة الفجر؟",o:["4 ركعات","3 ركعات","ركعتان ✔","ركعة واحدة"],a:2},
+ {q:"كم عدد ركعات صلاة المغرب؟",o:["ركعتان","4 ركعات","3 ركعات ✔","5 ركعات"],a:2},
+ {q:"ماذا نقول في الركوع؟",o:["سبحان ربي الأعلى","الله أكبر","سبحان ربي العظيم ✔","رب اغفر لي"],a:2},
+ {q:"ماذا نقول في السجود؟",o:["سبحان ربي الأعلى ✔","سبحان ربي العظيم","سمع الله لمن حمده","التحيات"],a:0},
+ {q:"ما أول خطوة في الوضوء؟",o:["غسل القدمين","النية والتسمية ✔","مسح الرأس","غسل الوجه"],a:1},
+ {q:"كم مرة نغسل الوجه في الوضوء؟",o:["مرة واحدة","مرتان","ثلاث مرات ✔","خمس مرات"],a:2},
+ {q:"ماذا نقول بعد الرفع من الركوع؟",o:["سبحان ربي العظيم","سمع الله لمن حمده، ربنا لك الحمد ✔","الله أكبر","آمين"],a:1},
+ {q:"على كم عضو نسجد؟",o:["5 أعضاء","7 أعضاء ✔","3 أعضاء","10 أعضاء"],a:1},
+ {q:"ما دعاء ما بعد الوضوء؟",o:["الحمد لله فقط","أشهد أن لا إله إلا الله.. اللهم اجعلني من التوابين والمتطهرين ✔","بسم الله","لا شيء"],a:1}
+];
+let qi=0,qScore=Number(localStorage.getItem('stars')||0);
+function renderQuiz(){
+  if(qi>=QUIZ.length){
+    const s=qScore;
+    qFinal.textContent=s>=80?"🎉 مذهل! أنت بطل الأبطال! 🏆⭐":s>=50?"👏 أحسنت! عمل رائع يا بطل! 🌟":"💪 جيد! راجع الدروس وحاول مجدداً يا بطل! 📚";
+    if(s>=50)celebrate();
+    qNext.disabled=true;return;
+  }
+  const Q=QUIZ[qi];
+  qNum.textContent=qi+1; qScoreEl(); qText.textContent=(qi+1)+". "+Q.q;
+  qOpts.innerHTML="";qNext.disabled=true;
+  Q.o.forEach((t,i)=>{const b=document.createElement("button");b.className="opt";b.textContent=t.replace(" ✔","");b.onclick=()=>checkQuiz(i,b);qOpts.appendChild(b)});
+  qStars.textContent=qi===0?"⭐⭐⭐":qScore>=70?"🌟🌟🌟":qScore>=40?"🌟🌟⭐":"🌟⭐⭐";
+}
+function qScoreEl(){qScore.textContent=qScore;myStars.textContent=qScore;certStars.textContent=qScore;localStorage.setItem('stars',qScore)}
+function checkQuiz(i,btn){
+  const Q=QUIZ[qi];
+  const btns=[...qOpts.children];
+  btns.forEach(b=>b.style.pointerEvents="none");
+  if(i===Q.a){btn.classList.add("ok");addStars(10);speak("إجابة صحيحة أحسنت");burstSmall()}
+  else{btn.classList.add("no");btns[Q.a].classList.add("ok");speak("إجابة خاطئة، ستتعلمها")}
+  qNext.disabled=false;
+}
+qNext.onclick=()=>{qi++;qFinal.textContent="";renderQuiz()};
+qRestart.onclick=()=>{qi=0;qFinal.textContent="";renderQuiz();speak("لنلعب من جديد")};
+
+/* ===== نجوم + شهادة ===== */
+function addStars(n){qScore=Math.max(0,qScore+n);qScoreEl()}
+function save(){localStorage.setItem('wuduDone',JSON.stringify([...wDone]));qScoreEl()}
+kidName.value=localStorage.getItem('kid')||"";
+certDate.textContent=new Date().toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'});
+makeCert.onclick=()=>{
+  const v=kidName.value.trim()||"البطل الصغير 🌟";
+  certName.textContent=v;localStorage.setItem('kid',kidName.value.trim());
+  celebrate();speak("مبارك يا "+v);
+  certificate.scrollIntoView({behavior:'smooth',block:'center'});
+};
+
+/* ===== مؤثرات ===== */
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';u.rate=1.05;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function boing(){try{const c=new (window.AudioContext||window.webkitAudioContext)();const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=520;g.gain.value=.08;o.start();o.frequency.exponentialRampToValueAtTime(880,.15);o.stop(c.currentTime+.18)}catch(e){}}
+const cv=confetti,ctx=cv.getContext('2d');let parts=[],raf=null;
+function sizeCv(){cv.width=innerWidth;cv.height=innerHeight}sizeCv();addEventListener('resize',sizeCv);
+function burstSmall(){burst(innerWidth/2,innerHeight/3,60)}
+function celebrate(){burst(innerWidth/2,innerHeight/3,220);setTimeout(()=>burst(innerWidth*.25,innerHeight/2,120),300);setTimeout(()=>burst(innerWidth*.75,innerHeight/2,120),600)}
+function burst(x,y,n){
+  const colors=['#29b6f6','#43a047','#ffb300','#ec407a','#7e57c2','#fff'];
+  for(let i=0;i<n;i++)parts.push({x,y,vx:(Math.random()-.5)*12,vy:Math.random()*-11-2,g:.35,s:Math.random()*8+4,c:colors[i%colors.length],r:Math.random()*Math.PI,vr:(Math.random()-.5)*.3,l:1});
+  if(!raf)tick();
+}
+function tick(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  parts=parts.filter(p=>p.l>0&&p.y<cv.height+30);
+  parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.r+=p.vr;p.l-=.008;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.globalAlpha=Math.max(p.l,0);ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);ctx.restore()});
+  if(parts.length){raf=requestAnimationFrame(tick)}else{raf=null;ctx.clearRect(0,0,cv.width,cv.height)}
+}
+/* نجوم خلفية + زر الصعود */
+stars.innerHTML=Array.from({length:40},()=>`<span style="position:absolute;top:${Math.random()*100}%;right:${Math.random()*100}%;font-size:${Math.random()*1+0.7}rem">✨</span>`).join("");
+addEventListener('scroll',()=>{topBtn.style.display=scrollY>500?'block':'none'});
+/* init */
+renderWudu();renderPrayers();renderQuiz();qScoreEl();
+</script>
+</body>
+</html>
