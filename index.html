@@ -295,7 +295,7 @@ footer .hearts{font-size:1.2rem}
   <a href="index.html#cert">🎓<span>شهادتي</span></a>
   <a href="about.html">👥<span>من نحن</span></a>
 </nav>
-<button class="top-btn" id="topBtn" onclick="scrollTo({top:0,behavior:'smooth'})">⬆️</button>
+<button class="top-btn" id="topBtn" aria-label="الرجوع إلى أعلى الصفحة">⬆️</button>
 
 <script>
 /* ===== بيانات الوضوء ===== */
@@ -445,7 +445,8 @@ function tick(){
 }
 /* نجوم خلفية + زر الصعود */
 stars.innerHTML=Array.from({length:40},()=>`<span style="position:absolute;top:${Math.random()*100}%;right:${Math.random()*100}%;font-size:${Math.random()*1+0.7}rem">✨</span>`).join("");
-addEventListener('scroll',()=>{topBtn.style.display=scrollY>500?'block':'none'});
+addEventListener('scroll',()=>{document.getElementById('topBtn').style.display=(scrollY||document.documentElement.scrollTop)>500?'block':'none'},{passive:true});
+document.getElementById('topBtn').addEventListener('click',()=>{try{window.scrollTo({top:0,left:0,behavior:'smooth'})}catch(_){window.scrollTo(0,0)}document.documentElement.scrollTop=0;document.body.scrollTop=0});
 /* init */
 renderWudu();renderPrayers();renderQuiz();qScoreEl();
 document.querySelectorAll('#links a').forEach(a=>a.addEventListener('click',()=>{document.getElementById('links').classList.remove('open')}));

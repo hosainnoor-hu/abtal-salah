@@ -1,5 +1,5 @@
 /* Service Worker — Abtal Al-Salah PWA (cache-first, offline ready) */
-const CACHE = 'abtal-salah-v3';
+const CACHE = 'abtal-salah-v4';
 const CORE = [
   './',
   './index.html',
