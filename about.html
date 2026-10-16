@@ -38,7 +38,8 @@ header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rg
 .links::-webkit-scrollbar{display:none}
 .links a{white-space:nowrap;text-decoration:none;color:var(--ink);font-weight:700;font-size:.9rem;background:#fff;border:2px solid #e1f5fe;padding:7px 14px;border-radius:999px}
 .links a:hover,.links a.on{background:var(--sky);color:#fff;border-color:var(--sky)}
-@media(max-width:760px){.links{display:none}}
+.burger{display:none;margin-inline-start:auto;background:#fff;border:2px solid #b3e5fc;color:var(--sky-d);border-radius:999px;padding:7px 14px;font-weight:800;cursor:pointer;font-family:inherit}
+@media(max-width:760px){.nav{flex-wrap:wrap}.burger{display:inline-flex}.links{display:none;width:100%;flex-wrap:wrap;justify-content:center;margin:8px 0 4px}.links.open{display:flex}}
 .hero{background:linear-gradient(135deg,#fff,#e1f5fe 60%,#e8f5e9);border:3px solid #fff;border-radius:28px;padding:32px 24px;box-shadow:var(--shadow);text-align:center;margin:26px 0}
 .hero h1{margin:.3em 0;color:#0d47a1;font-size:clamp(1.6rem,5vw,2.4rem)}
 .badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border:2px dashed var(--yellow);color:#7a5200;font-weight:800;padding:6px 14px;border-radius:999px;font-size:.9rem}
@@ -55,6 +56,10 @@ header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rg
 .btn-primary{background:linear-gradient(135deg,var(--sky-d),var(--sky));color:#fff}
 .btn-green{background:linear-gradient(135deg,var(--green-d),#66bb6a);color:#fff}
 footer{text-align:center;color:var(--muted);padding:26px 10px 40px;font-weight:600}
+.mobile-nav{position:fixed;bottom:0;right:0;left:0;z-index:55;background:rgba(255,255,255,.96);border-top:3px solid #b3e5fc;display:none;justify-content:flex-start;overflow-x:auto;padding:8px 4px calc(8px + env(safe-area-inset-bottom));scrollbar-width:none}
+.mobile-nav::-webkit-scrollbar{display:none}
+.mobile-nav a{text-decoration:none;font-weight:800;font-size:.72rem;color:var(--sky-d);display:flex;flex-direction:column;align-items:center;gap:2px;flex:1 0 auto;min-width:58px;padding:4px 6px;white-space:nowrap}
+@media(max-width:760px){.mobile-nav{display:flex}body{padding-bottom:76px}}
 </style>
 </head>
 <body>
@@ -62,7 +67,8 @@ footer{text-align:center;color:var(--muted);padding:26px 10px 40px;font-weight:6
 <header>
   <nav class="nav">
     <a class="logo" href="index.html"><span class="logo-badge">🕌</span> أبطال الصلاة</a>
-    <div class="links">
+    <button class="burger" id="burgerBtn" aria-label="فتح القائمة" aria-expanded="false" onclick="var l=document.getElementById('links');l.classList.toggle('open');this.setAttribute('aria-expanded',l.classList.contains('open'))">☰</button>
+    <div class="links" id="links">
       <a href="index.html#wudu">💧 الوضوء</a>
       <a href="index.html#prayer">🙏 الصلاة</a>
       <a href="index.html#mistakes">⚠️ انتبه يا بطل</a>
@@ -107,9 +113,9 @@ footer{text-align:center;color:var(--muted);padding:26px 10px 40px;font-weight:6
 
   <div class="card">
     <h2>👨‍💻 من أنشأ الموقع؟</h2>
-    <p>أنشأ هذا الموقع <b>حسين نور</b> بهدف خدمة الأطفال والناشئة وتعليمهم الوضوء والصلاة بأسلوب مبسط وممتع، وجعله متاحًا مجانًا للجميع.</p>
+    <p>أنشأ هذا الموقع <b>حسين مولوي نور الإسلام</b> بهدف خدمة الأطفال والناشئة وتعليمهم الوضوء والصلاة بأسلوب مبسط وممتع، وجعله متاحًا مجانًا للجميع.</p>
     <table class="data-table">
-      <tr><td>👤 الاسم</td><td>حسين نور (hosainnoor-hu)</td></tr>
+      <tr><td>👤 الاسم</td><td>حسين مولوي نور الإسلام (hosainnoor-hu)</td></tr>
       <tr><td>💻 الحساب</td><td><a href="https://github.com/hosainnoor-hu">github.com/hosainnoor-hu</a></td></tr>
       <tr><td>🤝 التواصل</td><td>عبر صفحة المستودع على GitHub</td></tr>
     </table>
@@ -142,8 +148,18 @@ footer{text-align:center;color:var(--muted);padding:26px 10px 40px;font-weight:6
   </footer>
 </div>
 
+<nav class="mobile-nav" id="mnav">
+  <a href="index.html#wudu">💧<span>الوضوء</span></a>
+  <a href="index.html#prayer">🙏<span>الصلاة</span></a>
+  <a href="index.html#mistakes">⚠️<span>انتبه</span></a>
+  <a href="index.html#quiz">🏆<span>العب</span></a>
+  <a href="index.html#cert">🎓<span>شهادتي</span></a>
+  <a href="about.html">👥<span>من نحن</span></a>
+</nav>
+
 <script>
 if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{})})}
+document.querySelectorAll('#links a').forEach(a=>a.addEventListener('click',()=>{document.getElementById('links').classList.remove('open')}));
 </script>
 </body>
 </html>
