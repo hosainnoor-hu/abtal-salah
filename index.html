@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🌙 أبطال الطهارة والصلاة | تعلّم الوضوء والصلاة بمرح</title>
 <meta name="description" content="موقع تفاعلي مرح لتعليم الأطفال والناشئة الوضوء والصلاة خطوة بخطوة">
+<meta name="theme-color" content="#0288d1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="أبطال الصلاة">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -436,6 +445,10 @@ stars.innerHTML=Array.from({length:40},()=>`<span style="position:absolute;top:$
 addEventListener('scroll',()=>{topBtn.style.display=scrollY>500?'block':'none'});
 /* init */
 renderWudu();renderPrayers();renderQuiz();qScoreEl();
+</script>
+<script>
+/* تسجيل Service Worker لتفعيل التثبيت والعمل دون اتصال */
+if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{})})}
 </script>
 </body>
 </html>
