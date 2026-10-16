@@ -169,7 +169,9 @@ footer .hearts{font-size:1.2rem}
         <a class="btn btn-primary" href="#wudu">💧 ابدأ الوضوء</a>
         <a class="btn btn-green" href="#prayer">🙏 تعلّم الصلاة</a>
         <a class="btn btn-yellow" href="#quiz">🏆 اختبر نفسك</a>
+        <button class="btn btn-green" id="installBtn" hidden>📲 ثبّت التطبيق</button>
       </div>
+      <p id="installHint" style="color:var(--muted);font-weight:700;margin:8px 0 0" hidden>📲 على آيفون: زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».</p>
       <div class="kid-stats">
         <div>💧 <span id="wuduDone">0</span>/9 خطوات وضوء</div>
         <div>🙏 <span id="prayerDone">0</span>/5 صلوات استكشفتها</div>
@@ -451,6 +453,20 @@ document.querySelectorAll('#links a').forEach(a=>a.addEventListener('click',()=>
 <script>
 /* تسجيل Service Worker لتفعيل التثبيت والعمل دون اتصال */
 if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{})})}
+/* زر التثبيت المباشر */
+(function(){
+  var btn=document.getElementById('installBtn'),hint=document.getElementById('installHint'),dp=null;
+  var standalone=(matchMedia('(display-mode: standalone)').matches)||(navigator.standalone===true);
+  if(standalone&&btn){btn.hidden=true;if(hint)hint.hidden=true;return}
+  var isiOS=/iphone|ipad|ipod/i.test(navigator.userAgent||'');
+  if(isiOS&&btn&&hint){btn.hidden=true;hint.hidden=false}
+  addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;if(btn)btn.hidden=false;if(hint)hint.hidden=true});
+  if(btn){btn.addEventListener('click',async function(){
+    if(dp){dp.prompt();try{await dp.userChoice}catch(_){}dp=null;btn.hidden=true}
+    else{alert('لتثبيت التطبيق:\n• أندرويد: من قائمة المتصفح اختر تثبيت التطبيق.\n• آيفون: زر المشاركة ثم إضافة إلى الشاشة الرئيسية.')}
+  })}
+  addEventListener('appinstalled',function(){dp=null;if(btn)btn.hidden=true});
+})();
 </script>
 </body>
 </html>

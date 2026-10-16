@@ -157,6 +157,7 @@ footer .hearts{font-size:1.2rem}
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
       <a class="btn btn-primary" href="index.html">🏠 العودة للرئيسية</a>
       <a class="btn btn-green" href="index.html#quiz">🏆 ابدأ الاختبار</a>
+      <button class="btn btn-green" id="installBtn2" hidden>📲 ثبّت التطبيق</button>
     </div>
   </div>
 
@@ -179,6 +180,17 @@ footer .hearts{font-size:1.2rem}
 document.getElementById('stars').innerHTML=Array.from({length:40},()=>`<span style="position:absolute;top:${Math.random()*100}%;right:${Math.random()*100}%;font-size:${Math.random()*1+0.7}rem">✨</span>`).join("");
 if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{})})}
 document.querySelectorAll('#links a').forEach(a=>a.addEventListener('click',()=>{document.getElementById('links').classList.remove('open')}));
+(function(){
+  var btn=document.getElementById('installBtn2'),dp=null;
+  var standalone=(matchMedia('(display-mode: standalone)').matches)||(navigator.standalone===true);
+  if(standalone) return;
+  addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;if(btn)btn.hidden=false});
+  if(btn){btn.addEventListener('click',async function(){
+    if(dp){dp.prompt();try{await dp.userChoice}catch(_){}dp=null;btn.hidden=true}
+    else{alert('لتثبيت التطبيق:\n• أندرويد: من قائمة المتصفح اختر تثبيت التطبيق.\n• آيفون: زر المشاركة ثم إضافة إلى الشاشة الرئيسية.')}
+  })}
+  addEventListener('appinstalled',function(){dp=null;if(btn)btn.hidden=true});
+})();
 </script>
 </body>
 </html>
