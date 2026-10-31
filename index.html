@@ -141,6 +141,30 @@ footer .hearts{font-size:1.2rem}
 .auth-area{display:flex;align-items:center;gap:8px;margin-inline-start:8px}
 .auth-chip{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#e8f5e9,#e1f5fe);border:2px solid #a5d6a7;border-radius:999px;padding:6px 12px;font-weight:800;font-size:.85rem;color:#1b5e20;white-space:nowrap}
 .auth-chip .dot-on{width:9px;height:9px;border-radius:50%;background:#43a047;box-shadow:0 0 0 3px rgba(67,160,71,.22)}
+
+/* ===== نافذة الحسابات المتعددة ===== */
+.modal-back{position:fixed;inset:0;background:rgba(13,71,161,.42);backdrop-filter:blur(4px);z-index:80;display:grid;place-items:center;padding:16px;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border-radius:26px;box-shadow:0 24px 60px rgba(2,60,90,.3);width:min(430px,100%);max-height:92vh;overflow:auto;border:3px solid #fff;animation:pop .28s cubic-bezier(.2,1.4,.5,1)}
+@keyframes pop{from{transform:scale(.86) translateY(16px);opacity:0}to{transform:none;opacity:1}}
+.modal-hd{background:linear-gradient(135deg,var(--sky-d),var(--green));color:#fff;padding:16px 18px;border-radius:22px 22px 0 0;display:flex;justify-content:space-between;align-items:center}
+.modal-hd h3{margin:0;font-size:1.2rem}
+.modal-x{background:rgba(255,255,255,.24);border:none;color:#fff;font-size:1.3rem;width:36px;height:36px;border-radius:50%;cursor:pointer;line-height:1}
+.modal-x:hover{background:rgba(255,255,255,.4)}
+.modal-bd{padding:18px}
+.auth-tabs{display:flex;gap:8px;margin-bottom:14px}
+.auth-tabs button{flex:1;border:2px solid #e1f5fe;background:#fbfdff;border-radius:14px;padding:10px;font-family:inherit;font-weight:800;cursor:pointer;font-size:.98rem;transition:.2s}
+.auth-tabs button.on{background:linear-gradient(135deg,var(--sky-d),var(--sky));color:#fff;border-color:var(--sky-d)}
+.fld{margin-bottom:11px}
+.fld label{display:block;font-weight:800;font-size:.88rem;color:#0d47a1;margin-bottom:5px}
+.fld input{width:100%;font-family:inherit;font-size:1rem;font-weight:600;padding:11px 13px;border-radius:14px;border:3px solid #e1f5fe;background:#fbfdff}
+.fld input:focus{outline:none;border-color:var(--sky);background:#fff}
+.auth-msg{font-weight:800;font-size:.88rem;padding:9px 12px;border-radius:12px;margin-top:6px;display:none}
+.auth-msg.err{display:block;background:#ffebee;color:#c62828;border:2px solid #ef9a9a}
+.auth-msg.ok{display:block;background:#e8f5e9;color:#2e7d32;border:2px solid #a5d6a7}
+.auth-note{font-size:.82rem;color:var(--muted);font-weight:700;text-align:center;margin-top:12px;line-height:1.8}
+.kid-avatars{display:flex;gap:8px;justify-content:center;margin-top:6px}
+.kid-avatars span{background:#e1f5fe;border:2px solid #b3e5fc;border-radius:999px;padding:5px 12px;font-weight:800;font-size:.85rem;color:#01579b}
 .sync-note{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:800;color:var(--muted);background:#fff;border:2px dashed #b3e5fc;border-radius:999px;padding:5px 12px}
 .sync-note .sp{display:inline-block;width:12px;height:12px;border:2px solid #90caf9;border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -319,13 +343,26 @@ footer .hearts{font-size:1.2rem}
     </div>
   </section>
 
+  <!-- LEADERBOARD -->
+  <section id="fame">
+    <div class="sec-head"><h2>🌟 قائمة الشهرة: أعلى المنجزين</h2><p>تُعرض الأسماء والنجوم فقط — لا أرقام جوال ولا ملاحظات ولا تفاصيل تقدّم أحد.</p></div>
+    <div class="card">
+      <div id="fameList" class="note-empty">⏳ جارٍ التحميل…</div>
+      <div style="text-align:center;margin-top:12px">
+        <button class="btn btn-ghost" id="fameRefresh" style="font-size:.9rem">🔄 تحديث القائمة</button>
+        <span class="sync-note" id="fameCount" style="margin-inline-start:8px"></span>
+      </div>
+    </div>
+  </section>
+
   <!-- NOTES -->
   <section id="notes">
     <div class="sec-head"><h2>📝 دفتر ملاحظاتي</h2><p>اكتب ماذا تعلّمت أو ما أصعب عليك، واحفظه في حسابك الخاص. لا يراه غيرك أبداً.</p></div>
     <div class="card">
       <div id="notesGate" class="note-empty" style="margin-bottom:14px">
-        🔐 لحفظ ملاحظاتك وتقدّمك في السحابة، اضغط «تسجيل الدخول» بالأعلى.
-        <br><small>الدخول سريع وبلا كلمة مرور — مصمّم للأطفال.</small>
+        🔐 لحفظ تقدّمك وملاحظاتك في حسابك الخاص، أنشئ حساباً أو سجّل دخولك.
+        <br><small>لكل بطل حسابه: 👦 الزبير و👦 أسيد — لكل واحد تقدّمه المستقل.</small>
+        <br><button class="btn btn-green" id="gateBtn" style="margin-top:10px">🔑 افتح الحسابات</button>
       </div>
       <div id="notesApp" hidden>
         <div class="pill-tabs" id="noteTabs"></div>
@@ -361,6 +398,65 @@ footer .hearts{font-size:1.2rem}
   <a href="about.html">👥<span>من نحن</span></a>
 </nav>
 <button class="top-btn" id="topBtn" aria-label="الرجوع إلى أعلى الصفحة">⬆️</button>
+
+<!-- ===== نافذة الحسابات المتعددة ===== -->
+<div class="modal-back" id="authModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modal-hd">
+      <h3 id="authTitle">🔑 حسابات الأبطال</h3>
+      <button class="modal-x" id="authClose" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="auth-tabs">
+        <button id="tabLogin" class="on">تسجيل الدخول</button>
+        <button id="tabSignup">حساب جديد</button>
+      </div>
+
+      <!-- تسجيل الدخول -->
+      <div id="formLogin">
+        <div class="fld"><label for="loginEmail">البريد الإلكتروني</label>
+          <input type="email" id="loginEmail" placeholder="example@mail.com" autocomplete="email" dir="ltr"></div>
+        <div class="fld"><label for="loginPass">كلمة المرور</label>
+          <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" dir="ltr"></div>
+        <button class="btn btn-primary" id="loginGo" style="width:100%">دخول ▶</button>
+        <button class="btn btn-ghost" id="forgotBtn" style="width:100%;margin-top:9px;font-size:.88rem">🔑 نسيت كلمة المرور؟ استعادة الحساب</button>
+      </div>
+
+      <!-- استعادة الحساب -->
+      <div id="formRecover" hidden>
+        <div class="fld"><label for="recPhone">رقم جوال الأب ✋</label>
+          <input type="tel" id="recPhone" placeholder="05XXXXXXXX" dir="ltr" inputmode="tel"></div>
+        <div class="fld"><label for="recName">اسم البطل المسجَّل</label>
+          <input type="text" id="recName" placeholder="مثال: الزبير" maxlength="40"></div>
+        <button class="btn btn-yellow" id="recoverGo" style="width:100%">ابحث عن الحساب 🔍</button>
+        <button class="btn btn-ghost" id="recoverBack" style="width:100%;margin-top:9px;font-size:.88rem">↩ رجوع لتسجيل الدخول</button>
+        <p class="auth-note" style="margin-top:8px">سنبحث بجوال الأب واسم البطل، ثم نرسل رابط إعادة تعيين كلمة المرور إلى بريد الحساب المسجَّل.</p>
+      </div>
+
+      <!-- حساب جديد -->
+      <div id="formSignup" hidden>
+        <div class="fld"><label for="signupName">اسم البطل ✏️</label>
+          <input type="text" id="signupName" placeholder="مثال: الزبير" maxlength="40"></div>
+        <div class="fld"><label for="signupPhone">رقم جوال الأب ✋ (إلزامي لاستعادة الحساب)</label>
+          <input type="tel" id="signupPhone" placeholder="05XXXXXXXX" dir="ltr" inputmode="tel" autocomplete="tel"></div>
+        <div class="fld"><label for="signupEmail">البريد الإلكتروني</label>
+          <input type="email" id="signupEmail" placeholder="example@mail.com" autocomplete="email" dir="ltr"></div>
+        <div class="fld"><label for="signupPass">كلمة المرور البطل يختارها (6 أحرف على الأقل)</label>
+          <input type="password" id="signupPass" placeholder="••••••" autocomplete="new-password" dir="ltr"></div>
+        <button class="btn btn-green" id="signupGo" style="width:100%">أنشئ الحساب ★</button>
+      </div>
+
+      <div class="auth-msg" id="authMsg"></div>
+
+      <div class="auth-note">
+        لكل بطل حسابه الخاص وتقدّمه وملاحظاته لا يشاركه بها أحد 🌟
+        <div class="kid-avatars"><span>👦 الزبير</span><span>👦 أسيد</span></div>
+      </div>
+      <button class="btn btn-ghost" id="guestBtn" style="width:100%;margin-top:12px;font-size:.9rem">دخول سريع كضيف (بدون حساب)</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- ===== Supabase: مكتبة العميل الرسمية ===== -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -487,6 +583,99 @@ const Store = {
     if(!this.ready) return 'غير مهيّأ';
     const {error} = await sb.auth.signInAnonymously();
     return error ? error.message : null;
+  },
+
+  /* ---------- حساب بريد + كلمة مرور (لكل بطل حسابه) ----------
+     phone: رقم جوال الأب (إلزامي للاستعادة) */
+  async signUpEmail(name, email, password, phone){
+    if(!this.ready) return 'غير مهيّأ';
+    const {data, error} = await sb.auth.signUp({
+      email, password, options:{ data:{ full_name:name, kid_name:name, parent_phone:phone } }
+    });
+    if(error) return this._msg(error.message);
+    const u = data.user;
+    if(u){
+      this.user = u;
+      /* اسم البطل في جدول التقدم — RLS يسمح لأن uid مطابق */
+      const {error:pe} = await sb.from('progress')
+        .upsert({user_id:u.id, kid_name:name}, {onConflict:'user_id'});
+      if(pe) console.warn('⚠️ حفظ الاسم:', pe.message);
+      /* جوال الأب في جدول الاستعادة — محميّ بـ RLS ولن يظهر في قائمة الشهرة */
+      const {error:re} = await sb.from('account_recovery')
+        .upsert({user_id:u.id, username:name, parent_phone:phone}, {onConflict:'user_id'});
+      if(re) console.warn('⚠️ حفظ جوال الأب:', re.message);
+      this.setLocal('kid', name);
+    }
+    if(!data.session) return 'يرجى تأكيد البريد الإلكتروني أولاً';
+    await this.pull();
+    return null;
+  },
+  /* ترجمة رسائل الخطأ الشائعة لرسائل عربية مفهومة */
+  _msg(m){
+    const s=(m||'').toLowerCase();
+    if(s.includes('already registered')||s.includes('already been registered')||s.includes('user already'))
+      return 'هذا البريد مسجَّل مسبقاً — جرّب «تسجيل الدخول»';
+    if(s.includes('password should be at least'))
+      return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+    if(s.includes('unable to validate email')||s.includes('invalid email'))
+      return 'صيغة البريد الإلكتروني غير صحيحة';
+    return m;
+  },
+  /* ---------- استعادة الحساب: جوال الأب + اسم البطل ---------- */
+  async recoverAccount(phone, username){
+    if(!this.ready) return 'غير مهيّأ';
+    if(!phone||!username) return 'أدخل جوال الأب واسم البطل';
+    try{
+      const {data, error} = await sb.rpc('find_account', {p_phone:phone, p_username:username});
+      if(error) return 'تعذّر البحث: '+error.message;
+      const mail = (data && data[0] && data[0].account_email) || '';
+      if(!mail) return 'لم نجد حساباً بهذا الجوال واسم البطل';
+      /* نُرسل رابط إعادة التعيين إلى بريد الحساب — فالوصول للبريد شرط ثانٍ */
+      const {error:re} = await sb.auth.resetPasswordForEmail(mail, {
+        redirectTo: location.origin + location.pathname
+      });
+      if(re) return 'تعذّر إرسال رابط الاستعادة: '+re.message;
+      return {ok:true, masked:this._mask(mail)};
+    }catch(e){ return 'خطأ شبكة أثناء الاستعادة'; }
+  },
+  _mask(em){
+    const [u,d]=String(em).split('@'); if(!d) return em;
+    const head=u.slice(0,Math.min(2,u.length));
+    return head+'•••@'+d;
+  },
+  /* ---------- قائمة الشهرة: الاسم والنجوم فقط ---------- */
+  async leaderboard(){
+    if(!this.ready) return [];
+    try{
+      const {data, error} = await sb.from('leaderboard').select('kid_name,stars').limit(50);
+      if(error){ console.warn('⚠️ قائمة الشهرة:', error.message); return []; }
+      return data||[];
+    }catch(e){ return []; }
+  },
+  async signInEmail(email, password){
+    if(!this.ready) return 'غير مهيّأ';
+    const {data, error} = await sb.auth.signInWithPassword({email, password});
+    if(error){
+      const m = (error.message||'').toLowerCase();
+      if(m.includes('invalid login')) return 'البريد أو كلمة المرور غير صحيحة';
+      if(m.includes('email not confirmed')) return 'لم يُؤكَّد البريد بعد — تحقق من بريدك';
+      return error.message;
+    }
+    this.user = data.user;
+    await this.pull();
+    /* نجلب الاسم المحفوظ في السحابة لعرضه */
+    try{
+      const {data:row} = await sb.from('progress').select('kid_name').eq('user_id', data.user.id).maybeSingle();
+      if(row && row.kid_name) this.setLocal('kid', row.kid_name);
+    }catch(e){}
+    return null;
+  },
+  /* اسم اللاعب الحالي: من البريد إن لم يكن هناك اسم محفوظ */
+  displayName(){
+    const saved=(this.get('kid','')||'').trim();
+    if(saved) return saved;
+    const em=this.user && this.user.email ? this.user.email : '';
+    return em ? em.split('@')[0] : 'بطل';
   },
   async signOut(){
     if(!this.ready) return;
@@ -731,18 +920,18 @@ function renderAuth(){
   if(!Store.ready){
     box.innerHTML='<span class="sync-note" title="ضع بيانات Supabase في index.html لتفعيل الحفظ السحابي">⚙️ وضع محلي</span>';
   } else if(Store.user){
-    box.innerHTML='<span class="auth-chip"><span class="dot-on"></span> حسابي مرتبط</span>'+
-      '<button class="btn btn-ghost" id="signOutBtn" style="padding:7px 13px;font-size:.85rem">خروج</button>';
+    box.innerHTML='<span class="auth-chip" title="أنت مسجّل دخولك كـ '+esc(Store.displayName())+'">'+
+      '<span class="dot-on"></span> 👤 '+esc(Store.displayName())+'</span>'+
+      '<button class="btn btn-ghost" id="signOutBtn" style="padding:7px 13px;font-size:.85rem">تبديل</button>';
     const b=document.getElementById('signOutBtn');
-    if(b) b.onclick=()=>Store.signOut();
-  } else {
-    box.innerHTML='<button class="btn btn-green" id="signInBtn" style="padding:8px 15px;font-size:.9rem">🔐 تسجيل الدخول</button>';
-    const b=document.getElementById('signInBtn');
     if(b) b.onclick=async()=>{
-      b.disabled=true;b.textContent='جارٍ الدخول…';
-      const err=await Store.signIn();
-      if(err){ b.disabled=false;b.textContent='🔐 تسجيل الدخول'; alert('تعذّر تسجيل الدخول:\n'+err); }
+      if(!confirm('تبديل اللاعب؟ سيخرج '+Store.displayName()+' (تقدّمه محفوظ في حسابه).')) return;
+      await Store.signOut(); openAuthModal('login');
     };
+  } else {
+    box.innerHTML='<button class="btn btn-green" id="signInBtn" style="padding:8px 15px;font-size:.9rem">🔐 حسابات الأبطال</button>';
+    const b=document.getElementById('signInBtn');
+    if(b) b.onclick=()=>openAuthModal('login');
   }
   /* بوابة الملاحظات */
   const gate=document.getElementById('notesGate'), app=document.getElementById('notesApp');
@@ -751,7 +940,153 @@ function renderAuth(){
     else { gate.hidden=false; app.hidden=true; }
   }
   updateBadges();
+  loadFame();
 }
+
+/* ============================================================
+   🔑 منطق نافذة الحسابات المتعددة
+   ============================================================ */
+function openAuthModal(which){
+  const m=document.getElementById('authModal'); if(!m) return;
+  m.hidden=false; setAuthTab(which||'login'); authMsg('');
+  const first=document.getElementById(which==='signup'?'signupName':'loginEmail');
+  if(first) setTimeout(()=>{try{first.focus()}catch(e){}},60);
+}
+function closeAuthModal(){ const m=document.getElementById('authModal'); if(m) m.hidden=true; }
+function setAuthTab(which){
+  const L=which==='signup', R=which==='recover';
+  document.getElementById('tabLogin').classList.toggle('on',!L && !R);
+  document.getElementById('tabSignup').classList.toggle('on',L);
+  document.getElementById('formLogin').hidden = L||R;
+  document.getElementById('formSignup').hidden = !L;
+  document.getElementById('formRecover').hidden = !R;
+  authMsg('');
+  if(R){
+    const p=document.getElementById('recPhone'), n=document.getElementById('recName');
+    if(p) p.value=''; if(n) n.value='';
+    setTimeout(()=>{try{p.focus()}catch(e){}},50);
+  }
+}
+function authMsg(text, kind){
+  const el=document.getElementById('authMsg'); if(!el) return;
+  el.className='auth-msg'+(text?(' '+kind):'');
+  el.textContent=text||'';
+}
+function afterAuthOK(name){
+  if(name) Store.set('kid', name);
+  closeAuthModal();
+  reloadState(); renderWudu(); renderPrayers(); renderQuiz(); qScoreEl();
+  renderAuth(); renderNoteTabs(); loadNotes();
+  celebrate(); speak('أهلاً بك يا '+(name||'بطل'));
+}
+document.getElementById('authClose').onclick=closeAuthModal;
+document.getElementById('authModal').addEventListener('click',e=>{ if(e.target.id==='authModal') closeAuthModal(); });
+addEventListener('keydown',e=>{ if(e.key==='Escape') closeAuthModal(); });
+document.getElementById('tabLogin').onclick=()=>setAuthTab('login');
+document.getElementById('tabSignup').onclick=()=>setAuthTab('signup');
+
+document.getElementById('loginGo').onclick=async function(){
+  const em=document.getElementById('loginEmail').value.trim();
+  const pw=document.getElementById('loginPass').value;
+  if(!em||!pw){ authMsg('أدخل البريد وكلمة المرور','err'); return; }
+  this.disabled=true; this.textContent='جارٍ الدخول…';
+  const err=await Store.signInEmail(em,pw);
+  this.disabled=false; this.textContent='دخول ▶';
+  if(err){ authMsg(err,'err'); return; }
+  authMsg('تم الدخول بنجاح!','ok');
+  afterAuthOK(Store.get('kid',''));
+};
+
+/* تحقق من صيغة رقم جوال الأب (سعودي أو دولي) */
+function validPhone(v){
+  const d=String(v||'').replace(/[^\d+]/g,'');
+  if(!/^\+?\d{9,15}$/.test(d)) return false;
+  const bare=d.replace(/\D/g,'');
+  return bare.length>=9 && bare.length<=15;
+}
+
+document.getElementById('signupGo').onclick=async function(){
+  const nm=document.getElementById('signupName').value.trim();
+  const ph=document.getElementById('signupPhone').value.trim();
+  const em=document.getElementById('signupEmail').value.trim();
+  const pw=document.getElementById('signupPass').value;
+  if(!nm){ authMsg('اكتب اسم البطل أولاً','err'); return; }
+  if(!ph){ authMsg('رقم جوال الأب إلزامي — لاستعادة الحساب عند فقدان كلمة المرور','err'); return; }
+  if(!validPhone(ph)){ authMsg('رقم الجوال غير صحيح — مثال: 0512345678','err'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ authMsg('صيغة البريد غير صحيحة','err'); return; }
+  if(pw.length<6){ authMsg('كلمة المرور 6 أحرف على الأقل (يختارها البطل)','err'); return; }
+  this.disabled=true; this.textContent='جارٍ الإنشاء…';
+  const err=await Store.signUpEmail(nm,em,pw,ph);
+  this.disabled=false; this.textContent='أنشئ الحساب ★';
+  if(err){ authMsg(err,'err'); return; }
+  authMsg('تم إنشاء حساب '+nm+' بنجاح 🎉','ok');
+  afterAuthOK(nm);
+};
+
+/* ---------- استعادة الحساب ---------- */
+document.getElementById('forgotBtn').onclick=()=>setAuthTab('recover');
+document.getElementById('recoverBack').onclick=()=>setAuthTab('login');
+document.getElementById('recoverGo').onclick=async function(){
+  const ph=document.getElementById('recPhone').value.trim();
+  const nm=document.getElementById('recName').value.trim();
+  if(!ph||!nm){ authMsg('أدخل جوال الأب واسم البطل','err'); return; }
+  this.disabled=true; this.textContent='جارٍ البحث…';
+  const r=await Store.recoverAccount(ph,nm);
+  this.disabled=false; this.textContent='ابحث عن الحساب 🔍';
+  if(r && r.ok){
+    authMsg('✅ وجدنا الحساب: '+r.masked+' — أرسلنا رابط إعادة التعيين إلى بريدك. افتح البريد واضغط الرابط لتغيير كلمة المرور.','ok');
+    speak('تم إرسال رابط الاستعادة');
+  } else {
+    authMsg(r||'تعذّرت الاستعادة','err');
+  }
+};
+
+document.getElementById('guestBtn').onclick=async function(){
+  if(Store.user){
+    if(!confirm('لديك حساب مسجّل. الدخول كضيف سيتجاوز حسابك الحالي. متابعة؟')) return;
+    await Store.signOut();
+  }
+  this.disabled=true; this.textContent='جارٍ الدخول…';
+  const err=await Store.signIn();
+  this.disabled=false; this.textContent='دخول سريع كضيف (بدون حساب)';
+  if(err){ authMsg(err,'err'); return; }
+  closeAuthModal(); renderAuth(); renderNoteTabs();
+  speak('أهلاً بك ضيفنا');
+};
+const gateOpenBtn=document.getElementById('gateBtn');
+if(gateOpenBtn) gateOpenBtn.onclick=()=>openAuthModal('login');
+
+/* ============================================================
+   🌟 قائمة الشهرة — الاسم والنجوم فقط (بلا أي تفاصيل)
+   ============================================================ */
+const FAME_MEDALS=['🥇','🥈','🥉'];
+async function loadFame(){
+  const box=document.getElementById('fameList'); if(!box) return;
+  if(!Store.ready){ box.innerHTML='⚙️ غير متاح في وضع محلي'; return; }
+  box.innerHTML='<div class="note-empty">⏳ جارٍ التحميل…</div>';
+  let rows=[];
+  try{ rows=await Store.leaderboard(); }catch(e){}
+  const cnt=document.getElementById('fameCount');
+  if(!rows.length){
+    box.innerHTML='<div class="note-empty">لا نتائج بعد 🌱<br><small>كن أول من يدخل قائمة الشهرة!</small></div>';
+    if(cnt) cnt.textContent='';
+    return;
+  }
+  box.innerHTML=rows.map((r,i)=>{
+    const me = Store.user && (r.kid_name||'').trim()===Store.displayName().trim();
+    const medal=FAME_MEDALS[i]||(i+1)+'️⃣';
+    return `<div class="note-item${me?' pinned':''}" style="align-items:center;${me?'border-color:var(--yellow);background:var(--yellow-l)':''}">
+      <div style="font-size:1.6rem;min-width:44px;text-align:center">${medal}</div>
+      <div class="n-body" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <h4 style="margin:0;color:#0d47a1">${esc(r.kid_name)}${me?' <span style="font-size:.75rem;color:#e65100">(أنت)</span>':''}</h4>
+        <span style="font-weight:900;color:#f57f17;background:#fff8e1;border:2px dashed var(--yellow);border-radius:999px;padding:4px 14px;white-space:nowrap">⭐ ${Number(r.stars)||0}</span>
+      </div>
+    </div>`;
+  }).join('');
+  if(cnt) cnt.textContent=rows.length+' بطل في القائمة';
+}
+const fameRefreshBtn=document.getElementById('fameRefresh');
+if(fameRefreshBtn) fameRefreshBtn.onclick=loadFame;
 
 /* ============================================================
    📝 دفتر الملاحظات (إضافة / عرض / تعديل / حذف)

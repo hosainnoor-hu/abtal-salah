@@ -155,5 +155,77 @@ alter table public.progress drop constraint if exists progress_stars_max;
 alter table public.progress
   add constraint progress_stars_max check (stars <= 100000);
 
+-- ------------------------------------------------------------
+-- 8) جوال الأب + استعادة الحساب (طلب المستخدم: رقم جوال الأب إلزامي)
+--    يُحفظ في جدول منفصل محميّ حتى لا يظهر في أي قائمة شهرة.
+-- ------------------------------------------------------------
+create table if not exists public.account_recovery (
+  user_id       uuid primary key references auth.users(id) on delete cascade,
+  username      text not null,
+  parent_phone  text not null,
+  created_at    timestamptz not null default now()
+);
+create index if not exists recovery_lookup_idx
+  on public.account_recovery (lower(parent_phone), lower(username));
+
+alter table public.account_recovery enable row level security;
+
+drop policy if exists "own recovery read"   on public.account_recovery;
+drop policy if exists "own recovery insert" on public.account_recovery;
+drop policy if exists "own recovery update" on public.account_recovery;
+drop policy if exists "own recovery delete" on public.account_recovery;
+
+create policy "own recovery read"
+  on public.account_recovery for select using (auth.uid() = user_id);
+create policy "own recovery insert"
+  on public.account_recovery for insert with check (auth.uid() = user_id);
+create policy "own recovery update"
+  on public.account_recovery for update
+  using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "own recovery delete"
+  on public.account_recovery for delete using (auth.uid() = user_id);
+
+-- ------------------------------------------------------------
+-- 9) دالة الاستعادة: جوال الأب + اسم البطل → البريد المسجَّل به
+--    SECURITY DEFINER لأنها تبحث في حسابات الآخرين بشكل مقصود.
+--    لا تُرجع إلا البريد (ومُموَّه في الواجهة)، ولا تُرجع أي بيانات أخرى.
+--    إعادة تعيين كلمة المرور نفسها تتطلب فتح رابط يصلك للبريد → عاملان معاً.
+-- ------------------------------------------------------------
+create or replace function public.find_account(p_phone text, p_username text)
+returns table (account_email text)
+language sql
+stable
+security definer set search_path = public
+as $$
+  select u.email::text as account_email
+  from public.account_recovery r
+  join auth.users u on u.id = r.user_id
+  where nullif(trim(p_phone),'') is not null
+    and nullif(trim(p_username),'') is not null
+    and lower(regexp_replace(r.parent_phone, '[^0-9+]', '', 'g'))
+        = lower(regexp_replace(p_phone,      '[^0-9+]', '', 'g'))
+    and lower(trim(r.username)) = lower(trim(p_username))
+  limit 1;
+$$;
+
+revoke all on function public.find_account(text, text) from public, anon;
+grant execute on function public.find_account(text, text) to anon, authenticated;
+
+-- ------------------------------------------------------------
+-- 10) قائمة الشهرة — تعرض الاسم والنجوم فقط
+--     لا تحتوي على: جوال، بريد، ملاحظات، خطوات وضوء، صلوات، ولا user_id
+-- ------------------------------------------------------------
+create or replace view public.leaderboard
+with (security_invoker = off) as
+  select kid_name, stars
+  from public.progress
+  where kid_name is not null
+    and btrim(kid_name) <> ''
+    and stars > 0
+  order by stars desc, kid_name asc
+  limit 50;
+
+grant select on public.leaderboard to anon, authenticated;
+
 -- ✅ انتهى. انتقل الآن إلى: Authentication → Providers → Anonymous → Enable
 --    ثم انسخ مفتاح anon من: Project Settings → API
