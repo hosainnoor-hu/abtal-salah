@@ -136,6 +136,35 @@ footer .hearts{font-size:1.2rem}
 .mobile-nav a{text-decoration:none;font-weight:800;font-size:.72rem;color:var(--sky-d);display:flex;flex-direction:column;align-items:center;gap:2px;flex:1 0 auto;min-width:58px;padding:4px 6px;white-space:nowrap}
 @media(max-width:860px){.mobile-nav{display:flex}body{padding-bottom:76px}}
 .ticker{background:linear-gradient(90deg,#0d47a1,#0288d1,#43a047);color:#fff;text-align:center;font-weight:800;padding:8px;font-size:.95rem}
+
+/* ===== حساب المستخدم (Supabase) ===== */
+.auth-area{display:flex;align-items:center;gap:8px;margin-inline-start:8px}
+.auth-chip{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#e8f5e9,#e1f5fe);border:2px solid #a5d6a7;border-radius:999px;padding:6px 12px;font-weight:800;font-size:.85rem;color:#1b5e20;white-space:nowrap}
+.auth-chip .dot-on{width:9px;height:9px;border-radius:50%;background:#43a047;box-shadow:0 0 0 3px rgba(67,160,71,.22)}
+.sync-note{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:800;color:var(--muted);background:#fff;border:2px dashed #b3e5fc;border-radius:999px;padding:5px 12px}
+.sync-note .sp{display:inline-block;width:12px;height:12px;border:2px solid #90caf9;border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:600px){.auth-area{width:100%;justify-content:center;margin:6px 0 0}}
+
+/* ===== دفتر الملاحظات ===== */
+.notes-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:760px){.notes-wrap{grid-template-columns:1fr}}
+.note-field{width:100%;font-family:inherit;font-size:1rem;font-weight:600;padding:12px;border-radius:16px;border:3px solid #e1f5fe;background:#fbfdff;resize:vertical}
+.note-field:focus{outline:none;border-color:var(--sky)}
+.note-item{background:#fff;border:2px solid #e1f5fe;border-radius:16px;padding:12px;margin:10px 0;display:flex;gap:10px;align-items:flex-start;transition:.2s}
+.note-item:hover{border-color:var(--sky);transform:translateX(-3px)}
+.note-item.pinned{border-color:var(--yellow);background:var(--yellow-l)}
+.note-item .n-body{flex:1;min-width:0}
+.note-item h4{margin:0 0 4px;color:#0d47a1;font-size:1.05rem}
+.note-item p{margin:0;color:var(--ink);font-weight:600;white-space:pre-wrap;word-break:break-word}
+.note-item time{display:block;margin-top:6px;font-size:.75rem;color:var(--muted);font-weight:700}
+.icon-btn{border:none;background:#f1f8e9;border-radius:12px;padding:6px 9px;cursor:pointer;font-size:1rem;transition:.15s}
+.icon-btn:hover{transform:scale(1.12)}
+.icon-btn.danger:hover{background:#ffebee}
+.note-empty{text-align:center;color:var(--muted);font-weight:700;padding:22px;border:3px dashed #e1f5fe;border-radius:16px}
+.pill-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+.pill-tabs button{border:2px solid #e1f5fe;background:#fff;border-radius:999px;padding:7px 15px;font-family:inherit;font-weight:800;cursor:pointer;font-size:.9rem;transition:.2s}
+.pill-tabs button.on{background:linear-gradient(135deg,var(--sky-d),var(--sky));color:#fff;border-color:var(--sky-d)}
 </style>
 </head>
 <body>
@@ -154,6 +183,7 @@ footer .hearts{font-size:1.2rem}
       <a href="#cert">🎓 شهادتي</a>
       <a href="about.html">👥 من نحن</a>
     </div>
+    <div id="authArea" class="auth-area" aria-live="polite"></div>
     <button class="btn btn-ghost burger" id="burgerBtn" aria-label="فتح القائمة" aria-expanded="false" onclick="var l=document.getElementById('links');l.classList.toggle('open');this.setAttribute('aria-expanded',l.classList.contains('open'))">☰</button>
   </nav>
 </header>
@@ -280,6 +310,41 @@ footer .hearts{font-size:1.2rem}
     </div>
   </section>
 
+  <!-- STAGE BADGES -->
+  <section id="badges">
+    <div class="sec-head"><h2>🏅 لوحة شارات الإنجاز</h2><p>تُحفظ شهادات مراحلك في حسابك حتى لو غيّرت جهازك.</p></div>
+    <div class="card">
+      <div id="badgeRow" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"></div>
+      <div id="badgeHint" class="sync-note" style="margin:14px auto 0;display:flex;width:max-content"></div>
+    </div>
+  </section>
+
+  <!-- NOTES -->
+  <section id="notes">
+    <div class="sec-head"><h2>📝 دفتر ملاحظاتي</h2><p>اكتب ماذا تعلّمت أو ما أصعب عليك، واحفظه في حسابك الخاص. لا يراه غيرك أبداً.</p></div>
+    <div class="card">
+      <div id="notesGate" class="note-empty" style="margin-bottom:14px">
+        🔐 لحفظ ملاحظاتك وتقدّمك في السحابة، اضغط «تسجيل الدخول» بالأعلى.
+        <br><small>الدخول سريع وبلا كلمة مرور — مصمّم للأطفال.</small>
+      </div>
+      <div id="notesApp" hidden>
+        <div class="pill-tabs" id="noteTabs"></div>
+        <div class="notes-wrap">
+          <div>
+            <input class="note-field" id="noteTitle" placeholder="عنوان الملاحظة (اختياري)" maxlength="120">
+            <textarea class="note-field" id="noteBody" rows="5" placeholder="اكتب ملاحظتك هنا يا بطل… مثلاً: «تذكّرت أن أبدأ باليد اليمنى»" maxlength="2000" style="margin-top:10px"></textarea>
+            <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+              <button class="btn btn-primary" id="noteSave">💾 حفظ الملاحظة</button>
+              <button class="btn btn-ghost" id="noteCancel" hidden>إلغاء التعديل</button>
+              <span class="sync-note" id="noteStatus" style="margin-inline-start:auto"></span>
+            </div>
+          </div>
+          <div id="noteList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="hearts">💧 🕌 🙏 🌙 ⭐</div>
     صُنع بحب للأطفال والناشئة • تعلّم الوضوء والصلاة بمرح • نسأل الله القبول 🤲
@@ -297,6 +362,163 @@ footer .hearts{font-size:1.2rem}
 </nav>
 <button class="top-btn" id="topBtn" aria-label="الرجوع إلى أعلى الصفحة">⬆️</button>
 
+<!-- ===== Supabase: مكتبة العميل الرسمية ===== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+
+<script>
+/* ============================================================
+   ⚙️  إعداد الاتصال بقاعدة بيانات Supabase
+   ------------------------------------------------------------
+   ضع هنا رابط مشروعك (Project URL) ومفتاحك العام (anon key).
+   تجدهما في:  Supabase Dashboard ← Project Settings ← API
+   ------------------------------------------------------------
+   ⚠️ المفتاح العام (anon / publishable) آمن بوضعه هنا في الموقع،
+      لأن جداولنا محمية بسياسة RLS فلا يستطيع أحد قراءة بيانات
+      غيره. أما مفتاح service_role فلا يُوضع في المتصفح أبداً.
+   ============================================================ */
+const SB_URL = "___ضع_رابط_مشروعك_هنا___";
+const SB_KEY = "___ضع_المفتاح_العام_هنا___";
+
+/* هل تم إدخال بيانات الاتصال فعلاً؟ */
+const SB_READY = !SB_URL.includes("___") && !SB_KEY.includes("___") && SB_URL.startsWith("http");
+const sb = SB_READY ? supabase.createClient(SB_URL, SB_KEY) : null;
+
+if(!SB_READY){
+  console.warn("⚙️ Supabase غير مُهيّأ: الموقع يعمل الآن بوضع محلي فقط (localStorage).");
+}
+
+/* ============================================================
+   🗄️  طبقة التخزين الموحّدة (Store)
+   ------------------------------------------------------------
+   تعمل دائماً محلياً (localStorage) → الموقع يعمل بدون إنترنت.
+   وعند تسجيل الدخول تزامن البيانات مع السحابة تلقائياً.
+   كل استدعاء set() يحفظ محلياً ثم يرسل للسحابة بتأخير قصير
+   (debounce) حتى لا نرسل طلبات كثيرة عند كل ضغطة.
+   ============================================================ */
+const Store = {
+  user: null,
+  ready: SB_READY,
+  _t: null,
+
+  /* ---------- محلي ---------- */
+  get(k, d){
+    try{ const v = localStorage.getItem('abtal_'+k); return v===null ? d : JSON.parse(v); }
+    catch(e){ return d; }
+  },
+  set(k, v){
+    try{ localStorage.setItem('abtal_'+k, JSON.stringify(v)); }catch(e){}
+    this.sync();
+    return v;
+  },
+  /* حفظ محلي فقط (بدون مزامنة) — لاستخدامه أثناء الدمج */
+  setLocal(k, v){
+    try{ localStorage.setItem('abtal_'+k, JSON.stringify(v)); }catch(e){}
+    return v;
+  },
+
+  /* ---------- المزامنة مع السحابة ---------- */
+  sync(){
+    if(!this.ready || !this.user) return;
+    const payload = {
+      user_id:      this.user.id,
+      kid_name:     this.get('kid',''),
+      stars:        this.get('stars',0),
+      wudu_done:    this.get('wuduDone',[]),
+      seen_prayers: this.get('seenP',[]),
+      stage_certs:  this.get('stageCerts',[])
+    };
+    clearTimeout(this._t);
+    this._t = setTimeout(async ()=>{
+      try{
+        const {error} = await sb.from('progress').upsert(payload, {onConflict:'user_id'});
+        if(error) console.warn('⚠️ فشلت المزامنة:', error.message);
+      }catch(e){ console.warn('⚠️ خطأ شبكة أثناء المزامنة'); }
+    }, 700);
+  },
+
+  /* ---------- جلب البيانات من السحابة ---------- */
+  async pull(){
+    if(!this.ready || !this.user) return;
+    try{
+      const {data, error} = await sb.from('progress').select('*').eq('user_id', this.user.id).maybeSingle();
+      if(error){ console.warn('⚠️ جلب:', error.message); return; }
+      if(data){
+        /* دمج: نأخذ الأعلى بين المحلي والسحابي حتى لا نفقد تقدماً */
+        const merge=(a,b)=>[...new Set([...(a||[]),...(b||[])])];
+        this.setLocal('kid',      data.kid_name || this.get('kid',''));
+        this.setLocal('stars',    Math.max(data.stars||0, this.get('stars',0)));
+        this.setLocal('wuduDone', merge(data.wudu_done, this.get('wuduDone',[])));
+        this.setLocal('seenP',    merge(data.seen_prayers, this.get('seenP',[])));
+        this.setLocal('stageCerts', merge(data.stage_certs, this.get('stageCerts',[])));
+        if(typeof reloadState==='function') reloadState();
+        if(typeof renderWudu==='function')  renderWudu();
+        if(typeof renderPrayers==='function') renderPrayers();
+      }
+    }catch(e){ console.warn('⚠️ خطأ شبكة أثناء الجلب'); }
+  },
+
+  /* ---------- الجلسة ---------- */
+  async init(){
+    if(!this.ready) return;
+    sb.auth.onAuthStateChange((_e, session)=>{
+      const had = !!this.user;
+      this.user = session?.user || null;
+      if(this.user && !had) this.pull();
+      if(typeof renderAuth==='function') renderAuth();
+    });
+    try{
+      const {data} = await sb.auth.getSession();
+      if(data?.session?.user){ this.user = data.session.user; await this.pull(); }
+    }catch(e){ /* لا إنترنت — نكمل بالمحلي */ }
+  },
+
+  async signIn(){
+    if(!this.ready) return 'غير مهيّأ';
+    const {error} = await sb.auth.signInAnonymously();
+    return error ? error.message : null;
+  },
+  async signOut(){
+    if(!this.ready) return;
+    await sb.auth.signOut();
+    this.user = null;
+    if(typeof renderAuth==='function') renderAuth();
+  },
+
+  /* ========== دفتر الملاحظات ========== */
+
+  /* جلب: إضافة | تعديل | حذف | عرض */
+  async notesList(section){
+    if(!this.ready || !this.user) return [];
+    let q = sb.from('notes').select('*').eq('user_id', this.user.id);
+    if(section && section!=='all') q = q.eq('section', section);
+    const {data, error} = await q.order('is_pinned',{ascending:false}).order('created_at',{ascending:false});
+    if(error){ console.warn('⚠️ الملاحظات:', error.message); return []; }
+    return data || [];
+  },
+  async noteAdd(section, title, body){
+    if(!this.ready || !this.user) return {error:'سجّل الدخول أولاً'};
+    const {data, error} = await sb.from('notes').insert({
+      user_id:this.user.id, section, title:title||'بدون عنوان', body
+    }).select().single();
+    if(error) return {error:error.message};
+    return {data};
+  },
+  async noteUpdate(id, title, body){
+    if(!this.ready || !this.user) return {error:'غير مصرّح'};
+    const {error} = await sb.from('notes')
+      .update({title, body, updated_at:new Date().toISOString()})
+      .eq('id', id).eq('user_id', this.user.id);
+    return error ? {error:error.message} : {ok:true};
+  },
+  async noteDelete(id){
+    if(!this.ready || !this.user) return {error:'غير مصرّح'};
+    const {error} = await sb.from('notes')
+      .delete().eq('id', id).eq('user_id', this.user.id);
+    return error ? {error:error.message} : {ok:true};
+  }
+};
+</script>
+
 <script>
 /* ===== بيانات الوضوء ===== */
 const WUDU=[
@@ -310,7 +532,7 @@ const WUDU=[
  {e:"👂",n:"مسح الأذنين مرة واحدة",d:"بنفس ماء الرأس: امسح أذنيك من الداخل بالسبابتين ومن الخارج بالإبهامين. مرة واحدة.",duaa:"📿 الأذنان من الرأس فلا تنسَهما يا بطل!",sun:"🌟 سنة: مسح الأذنين بعد الرأس مباشرة."},
  {e:"🦶",n:"غسل القدمين إلى الكعبين 3 مرات",d:"اغسل قدمك اليمنى إلى الكعبين (العظمتين) ثلاثاً مع تخليل الأصابع، ثم اليسرى. ثم قل دعاء ما بعد الوضوء!",duaa:"📿 دعاء بعد الوضوء: «أشهد أن لا إله إلا الله وحده لا شريك له، وأشهد أن محمداً عبده ورسوله، اللهم اجعلني من التوابين واجعلني من المتطهرين»",sun:"🌟 سنة: صلاة ركعتين بعد الوضوء، والاقتصاد في الماء."}
 ];
-let wi=0, wDoneSet=new Set(JSON.parse(localStorage.getItem('wuduDone')||'[]'));
+let wi=0, wDoneSet=new Set(Store.get('wuduDone',[]));
 function renderWudu(){
   const s=WUDU[wi];
   wEmoji.textContent=s.e; wName.textContent=(wi+1)+". "+s.n; wDesc.textContent=s.d;
@@ -355,7 +577,7 @@ const MOVES=[
  {e:"🧎‍♂️",n:"الجلسة بين السجدتين",say:"«رب اغفر لي» 3 مرات",d:"اجلس مطمئناً وقل: رب اغفر لي وارحمني واهدني وارزقني. ثم اسجد السجدة الثانية مثل الأولى."},
  {e:"🪑",n:"التشهد والسلام",say:"التحيات + السلام عليكم",d:"في آخر الصلاة اجلس واقرأ التحيات والصلاة الإبراهيمية، ثم التفت يميناً: السلام عليكم ورحمة الله، ويساراً مثلها. 🎉 تقبل الله!"}
 ];
-let pi=0, seenPrayers=new Set(JSON.parse(localStorage.getItem('seenP')||'[]'));
+let pi=0, seenPrayers=new Set(Store.get('seenP',[]));
 function renderPrayers(){
   prayerTabs.innerHTML="";
   PRAYERS.forEach((p,i)=>{const b=document.createElement("button");b.textContent=`${p.e} ${p.n}`;b.className=i===pi?"on":"";b.onclick=()=>{pi=i;seenPrayers.add(i);boing();renderPrayers()};prayerTabs.appendChild(b)});
@@ -365,7 +587,7 @@ function renderPrayers(){
   moves.innerHTML="";
   MOVES.forEach((m,i)=>{const d=document.createElement("div");d.className="move";d.innerHTML=`<div class="e">${m.e}</div><h4>${i+1}. ${m.n}</h4><p>${m.say}</p>`;d.onclick=()=>{document.querySelectorAll('.move').forEach(x=>x.classList.remove('on'));d.classList.add('on');moveDetail.innerHTML=`<b style="color:#2e7d32;font-size:1.15rem">${m.e} ${m.n}</b><br>${m.d}<div class="say" style="background:#fff;border-radius:12px;padding:8px;margin-top:8px;font-weight:800;color:#0d47a1;border:1px dashed #29b6f6">📿 تقول: ${m.say}</div>`;boing()};moves.appendChild(d)});
   prayerDone.textContent=seenPrayers.size;
-  localStorage.setItem('seenP',JSON.stringify([...seenPrayers]));
+  Store.set('seenP',[...seenPrayers]);
 }
 
 /* ===== أخطاء شائعة ===== */
@@ -387,7 +609,7 @@ const QUIZ=[
  {q:"على كم عضو نسجد؟",o:["5 أعضاء","7 أعضاء ✔","3 أعضاء","10 أعضاء"],a:1},
  {q:"ما دعاء ما بعد الوضوء؟",o:["الحمد لله فقط","أشهد أن لا إله إلا الله.. اللهم اجعلني من التوابين والمتطهرين ✔","بسم الله","لا شيء"],a:1}
 ];
-let qi=0,score=Number(localStorage.getItem('stars')||0);
+let qi=0,score=Store.get('stars',0);
 function renderQuiz(){
   if(qi>=QUIZ.length){
     const s=score;
@@ -401,7 +623,7 @@ function renderQuiz(){
   Q.o.forEach((t,i)=>{const b=document.createElement("button");b.className="opt";b.textContent=t.replace(" ✔","");b.onclick=()=>checkQuiz(i,b);qOpts.appendChild(b)});
   qStars.textContent=qi===0?"⭐⭐⭐":score>=70?"🌟🌟🌟":score>=40?"🌟🌟⭐":"🌟⭐⭐";
 }
-function qScoreEl(){document.getElementById("qScore").textContent=score;myStars.textContent=score;certStars.textContent=score;localStorage.setItem('stars',score)}
+function qScoreEl(){document.getElementById("qScore").textContent=score;myStars.textContent=score;certStars.textContent=score;Store.set('stars',score)}
 function checkQuiz(i,btn){
   const Q=QUIZ[qi];
   const btns=[...qOpts.children];
@@ -415,12 +637,12 @@ qRestart.onclick=()=>{qi=0;qFinal.textContent="";renderQuiz();speak("لنلعب 
 
 /* ===== نجوم + شهادة ===== */
 function addStars(n){score=Math.max(0,score+n);qScoreEl()}
-function save(){localStorage.setItem('wuduDone',JSON.stringify([...wDoneSet]));qScoreEl()}
-kidName.value=localStorage.getItem('kid')||"";
+function save(){Store.set('wuduDone',[...wDoneSet]);qScoreEl()}
+kidName.value=Store.get('kid','');
 certDate.textContent=new Date().toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'});
 makeCert.onclick=()=>{
   const v=kidName.value.trim()||"البطل الصغير 🌟";
-  certName.textContent=v;localStorage.setItem('kid',kidName.value.trim());
+  certName.textContent=v;Store.set('kid',kidName.value.trim());
   celebrate();speak("مبارك يا "+v);
   certificate.scrollIntoView({behavior:'smooth',block:'center'});
 };
@@ -447,8 +669,173 @@ function tick(){
 stars.innerHTML=Array.from({length:40},()=>`<span style="position:absolute;top:${Math.random()*100}%;right:${Math.random()*100}%;font-size:${Math.random()*1+0.7}rem">✨</span>`).join("");
 addEventListener('scroll',()=>{document.getElementById('topBtn').style.display=(scrollY||document.documentElement.scrollTop)>500?'block':'none'},{passive:true});
 document.getElementById('topBtn').addEventListener('click',()=>{try{window.scrollTo({top:0,left:0,behavior:'smooth'})}catch(_){window.scrollTo(0,0)}document.documentElement.scrollTop=0;document.body.scrollTop=0});
-/* init */
-renderWudu();renderPrayers();renderQuiz();qScoreEl();
+/* ============================================================
+   🔄 إعادة تحميل الحالة من طبقة التخزين (محلي + سحابي)
+   تُستدعى عند بدء التشغيل وعند جلب بيانات الحساب من السحابة
+   ============================================================ */
+function reloadState(){
+  wDoneSet   = new Set(Store.get('wuduDone',[]));
+  seenPrayers= new Set(Store.get('seenP',[]));
+  score      = Store.get('stars',0);
+  kidName.value = Store.get('kid','');
+  qScoreEl();
+}
+
+/* ============================================================
+   🏅 شارات المراحل
+   ============================================================ */
+const STAGES=[
+  {e:'💧',n:'الوضوء',  ok:()=>wDoneSet.size>=WUDU.length},
+  {e:'🙏',n:'الصلاة',  ok:()=>seenPrayers.size>=PRAYERS.length},
+  {e:'🏆',n:'الاختبار',ok:()=>score>=50},
+  {e:'🎓',n:'الشهادة', ok:()=>!!(kidName.value||'').trim()}
+];
+function updateBadges(){
+  const row=document.getElementById('badgeRow'); if(!row) return;
+  row.innerHTML=STAGES.map(s=>{
+    const done=s.ok();
+    return `<div style="text-align:center;min-width:112px;padding:14px 10px;border-radius:18px;border:3px ${done?'solid #66bb6a':'dashed #e0e0e0'};background:${done?'linear-gradient(180deg,#fff,#e8f5e9)':'#fafafa'};opacity:${done?1:.62}">
+      <div style="font-size:2.4rem;filter:${done?'none':'grayscale(1)'}">${s.e}</div>
+      <div style="font-weight:800;color:${done?'#2e7d32':'#9e9e9e'}">${s.n}</div>
+      <div style="font-size:.78rem;font-weight:800;color:${done?'#43a047':'#bdbdbd'}">${done?'✅ أُنجزت':'🔒 لم تبدأ'}</div>
+    </div>`;
+  }).join('');
+  const doneCount=STAGES.filter(s=>s.ok()).length;
+  const hint=document.getElementById('badgeHint');
+  if(hint) hint.innerHTML = doneCount===STAGES.length
+    ? '🎉 رائع! أتممت جميع المراحل يا بطل!'
+    : `أتممت ${doneCount} من ${STAGES.length} مراحل`;
+
+  /* حفظ الشارات المكتسبة في السحابة (يُزامَن عبر Store.sync) */
+  const earned=STAGES.filter(s=>s.ok()).map(s=>s.n);
+  const prev=Store.get('stageCerts',[]);
+  if(JSON.stringify(prev)!==JSON.stringify(earned)) Store.set('stageCerts',earned);
+}
+
+/* ============================================================
+   🔐 واجهة تسجيل الدخول
+   ============================================================ */
+function renderAuth(){
+  const box=document.getElementById('authArea'); if(!box) return;
+  if(!Store.ready){
+    box.innerHTML='<span class="sync-note" title="ضع بيانات Supabase في index.html لتفعيل الحفظ السحابي">⚙️ وضع محلي</span>';
+  } else if(Store.user){
+    box.innerHTML='<span class="auth-chip"><span class="dot-on"></span> حسابي مرتبط</span>'+
+      '<button class="btn btn-ghost" id="signOutBtn" style="padding:7px 13px;font-size:.85rem">خروج</button>';
+    const b=document.getElementById('signOutBtn');
+    if(b) b.onclick=()=>Store.signOut();
+  } else {
+    box.innerHTML='<button class="btn btn-green" id="signInBtn" style="padding:8px 15px;font-size:.9rem">🔐 تسجيل الدخول</button>';
+    const b=document.getElementById('signInBtn');
+    if(b) b.onclick=async()=>{
+      b.disabled=true;b.textContent='جارٍ الدخول…';
+      const err=await Store.signIn();
+      if(err){ b.disabled=false;b.textContent='🔐 تسجيل الدخول'; alert('تعذّر تسجيل الدخول:\n'+err); }
+    };
+  }
+  /* بوابة الملاحظات */
+  const gate=document.getElementById('notesGate'), app=document.getElementById('notesApp');
+  if(gate&&app){
+    if(Store.user){ gate.hidden=true; app.hidden=false; loadNotes(); }
+    else { gate.hidden=false; app.hidden=true; }
+  }
+  updateBadges();
+}
+
+/* ============================================================
+   📝 دفتر الملاحظات (إضافة / عرض / تعديل / حذف)
+   ============================================================ */
+const NOTE_SECTIONS=[{k:'all',n:'الكل'},{k:'wudu',n:'💧 وضوء'},{k:'prayer',n:'🙏 صلاة'},{k:'quiz',n:'🏆 اختبار'},{k:'general',n:'📝 عام'}];
+let activeNoteSection='all', editingNoteId=null, notesCache=[];
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderNoteTabs(){
+  const t=document.getElementById('noteTabs'); if(!t) return;
+  t.innerHTML=NOTE_SECTIONS.map(s=>`<button data-k="${s.k}" class="${activeNoteSection===s.k?'on':''}">${s.n}</button>`).join('');
+  t.querySelectorAll('button').forEach(b=>b.onclick=()=>{activeNoteSection=b.dataset.k;renderNoteTabs();loadNotes();});
+}
+function noteMsg(txt,ok){
+  const el=document.getElementById('noteStatus'); if(!el) return;
+  el.innerHTML=(ok?'✅ ':'⚠️ ')+esc(txt);
+  clearTimeout(el._t); el._t=setTimeout(()=>{el.innerHTML='';},3500);
+}
+async function loadNotes(){
+  const list=document.getElementById('noteList'); if(!list||!Store.user) return;
+  list.innerHTML='<div class="note-empty">⏳ جارٍ التحميل…</div>';
+  notesCache=await Store.notesList(activeNoteSection);
+  renderNoteList();
+}
+function renderNoteList(){
+  const list=document.getElementById('noteList'); if(!list) return;
+  if(!notesCache.length){ list.innerHTML='<div class="note-empty">لا ملاحظات بعد ✍️<br><small>اكتب أول ملاحظة لك!</small></div>'; return; }
+  list.innerHTML=notesCache.map(n=>`
+    <div class="note-item${n.is_pinned?' pinned':''}" data-id="${n.id}">
+      <div class="n-body">
+        <h4>${esc(n.title)}</h4>
+        <p>${esc(n.body)}</p>
+        <time>${new Date(n.created_at).toLocaleString('ar-EG')}</time>
+      </div>
+      <div style="display:flex;gap:4px;flex-direction:column">
+        <button class="icon-btn" data-act="edit" title="تعديل" aria-label="تعديل">✏️</button>
+        <button class="icon-btn danger" data-act="del" title="حذف" aria-label="حذف">🗑️</button>
+      </div>
+    </div>`).join('');
+  list.querySelectorAll('.icon-btn').forEach(btn=>{
+    btn.onclick=()=>{
+      const id=btn.closest('.note-item').dataset.id;
+      const n=notesCache.find(x=>x.id===id); if(!n) return;
+      if(btn.dataset.act==='edit'){
+        editingNoteId=id;
+        document.getElementById('noteTitle').value=n.title;
+        document.getElementById('noteBody').value=n.body;
+        document.getElementById('noteSave').textContent='💾 تحديث الملاحظة';
+        document.getElementById('noteCancel').hidden=false;
+        document.getElementById('noteTitle').focus();
+      } else {
+        if(confirm('هل تريد حذف هذه الملاحظة نهائياً؟')) delNote(id);
+      }
+    };
+  });
+}
+function resetNoteForm(){
+  editingNoteId=null;
+  document.getElementById('noteTitle').value='';
+  document.getElementById('noteBody').value='';
+  document.getElementById('noteSave').textContent='💾 حفظ الملاحظة';
+  document.getElementById('noteCancel').hidden=true;
+}
+async function saveNote(){
+  const title=document.getElementById('noteTitle').value.trim();
+  const body=document.getElementById('noteBody').value.trim();
+  if(!body){ noteMsg('اكتب نص الملاحظة أولاً',false); return; }
+  if(!Store.user){ noteMsg('سجّل الدخول أولاً',false); return; }
+  const sec=(activeNoteSection==='all')?'general':activeNoteSection;
+  const r = editingNoteId ? await Store.noteUpdate(editingNoteId,title,body)
+                          : await Store.noteAdd(sec,title,body);
+  if(r.error){ noteMsg(r.error,false); return; }
+  noteMsg(editingNoteId?'تم التحديث بنجاح':'تم الحفظ بنجاح',true);
+  resetNoteForm(); await loadNotes(); celebrate();
+}
+async function delNote(id){
+  const r=await Store.noteDelete(id);
+  if(r.error){ noteMsg(r.error,false); return; }
+  noteMsg('تم الحذف',true);
+  await loadNotes();
+}
+document.getElementById('noteSave').onclick=saveNote;
+document.getElementById('noteCancel').onclick=resetNoteForm;
+renderNoteTabs();
+
+/* ============================================================
+   🚀 بدء التشغيل — ننتظر أولاً استعادة الجلسة وجلب البيانات
+   ============================================================ */
+(async function(){
+  await Store.init();       // استعادة الجلسة + جلب التقدم من السحابة
+  reloadState();            // إعادة قراءة الحالة بعد الدمج
+  renderWudu();renderPrayers();renderQuiz();qScoreEl();
+  renderAuth();             // واجهة الحساب + بوابة الملاحظات + الشارات
+})();
+
 document.querySelectorAll('#links a').forEach(a=>a.addEventListener('click',()=>{document.getElementById('links').classList.remove('open')}));
 </script>
 <script>
