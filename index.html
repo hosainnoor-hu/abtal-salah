@@ -163,8 +163,6 @@ footer .hearts{font-size:1.2rem}
 .auth-msg.err{display:block;background:#ffebee;color:#c62828;border:2px solid #ef9a9a}
 .auth-msg.ok{display:block;background:#e8f5e9;color:#2e7d32;border:2px solid #a5d6a7}
 .auth-note{font-size:.82rem;color:var(--muted);font-weight:700;text-align:center;margin-top:12px;line-height:1.8}
-.kid-avatars{display:flex;gap:8px;justify-content:center;margin-top:6px}
-.kid-avatars span{background:#e1f5fe;border:2px solid #b3e5fc;border-radius:999px;padding:5px 12px;font-weight:800;font-size:.85rem;color:#01579b}
 .sync-note{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:800;color:var(--muted);background:#fff;border:2px dashed #b3e5fc;border-radius:999px;padding:5px 12px}
 .sync-note .sp{display:inline-block;width:12px;height:12px;border:2px solid #90caf9;border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -361,7 +359,6 @@ footer .hearts{font-size:1.2rem}
     <div class="card">
       <div id="notesGate" class="note-empty" style="margin-bottom:14px">
         🔐 لحفظ تقدّمك وملاحظاتك في حسابك الخاص، أنشئ حساباً أو سجّل دخولك.
-        <br><small>لكل بطل حسابه: 👦 الزبير و👦 أسيد — لكل واحد تقدّمه المستقل.</small>
         <br><button class="btn btn-green" id="gateBtn" style="margin-top:10px">🔑 افتح الحسابات</button>
       </div>
       <div id="notesApp" hidden>
@@ -414,12 +411,15 @@ footer .hearts{font-size:1.2rem}
 
       <!-- تسجيل الدخول -->
       <div id="formLogin">
-        <div class="fld"><label for="loginEmail">البريد الإلكتروني</label>
-          <input type="email" id="loginEmail" placeholder="example@mail.com" autocomplete="email" dir="ltr"></div>
+        <div class="fld"><label for="loginEmail">البريد الإلكتروني أو رقم جوال الأب</label>
+          <input type="text" id="loginEmail" placeholder="example@mail.com أو 05XXXXXXXX" autocomplete="username" dir="ltr" inputmode="email"></div>
+        <div class="fld" id="loginNameFld" hidden><label for="loginName">اسم البطل ✏️ (مطلوب مع الجوال)</label>
+          <input type="text" id="loginName" placeholder="مثال: الزبير" maxlength="40"></div>
         <div class="fld"><label for="loginPass">كلمة المرور</label>
           <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" dir="ltr"></div>
         <button class="btn btn-primary" id="loginGo" style="width:100%">دخول ▶</button>
         <button class="btn btn-ghost" id="forgotBtn" style="width:100%;margin-top:9px;font-size:.88rem">🔑 نسيت كلمة المرور؟ استعادة الحساب</button>
+        <p class="auth-note" style="margin-top:8px">📧 أدخل بريدك، أو جوال الأب مع اسم البطل إن كان الحساب بدون بريد.</p>
       </div>
 
       <!-- استعادة الحساب -->
@@ -430,17 +430,17 @@ footer .hearts{font-size:1.2rem}
           <input type="text" id="recName" placeholder="مثال: الزبير" maxlength="40"></div>
         <button class="btn btn-yellow" id="recoverGo" style="width:100%">ابحث عن الحساب 🔍</button>
         <button class="btn btn-ghost" id="recoverBack" style="width:100%;margin-top:9px;font-size:.88rem">↩ رجوع لتسجيل الدخول</button>
-        <p class="auth-note" style="margin-top:8px">سنبحث بجوال الأب واسم البطل، ثم نرسل رابط إعادة تعيين كلمة المرور إلى بريد الحساب المسجَّل.</p>
+        <p class="auth-note" style="margin-top:8px">سنبحث بجوال الأب واسم البطل، ثم نرسل رابط إعادة تعيين كلمة المرور إلى بريد الحساب المسجَّل (إن وجد).</p>
       </div>
 
       <!-- حساب جديد -->
       <div id="formSignup" hidden>
         <div class="fld"><label for="signupName">اسم البطل ✏️</label>
           <input type="text" id="signupName" placeholder="مثال: الزبير" maxlength="40"></div>
-        <div class="fld"><label for="signupPhone">رقم جوال الأب ✋ (إلزامي لاستعادة الحساب)</label>
+        <div class="fld"><label for="signupPhone">رقم جوال الأب ✋ (إلزامي — للاستعادة والدخول بالجوال)</label>
           <input type="tel" id="signupPhone" placeholder="05XXXXXXXX" dir="ltr" inputmode="tel" autocomplete="tel"></div>
-        <div class="fld"><label for="signupEmail">البريد الإلكتروني</label>
-          <input type="email" id="signupEmail" placeholder="example@mail.com" autocomplete="email" dir="ltr"></div>
+        <div class="fld"><label for="signupEmail">البريد الإلكتروني (اختياري)</label>
+          <input type="email" id="signupEmail" placeholder="اتركه فارغاً إن لم يكن لديك بريد" autocomplete="email" dir="ltr"></div>
         <div class="fld"><label for="signupPass">كلمة المرور البطل يختارها (6 أحرف على الأقل)</label>
           <input type="password" id="signupPass" placeholder="••••••" autocomplete="new-password" dir="ltr"></div>
         <button class="btn btn-green" id="signupGo" style="width:100%">أنشئ الحساب ★</button>
@@ -450,7 +450,6 @@ footer .hearts{font-size:1.2rem}
 
       <div class="auth-note">
         لكل بطل حسابه الخاص وتقدّمه وملاحظاته لا يشاركه بها أحد 🌟
-        <div class="kid-avatars"><span>👦 الزبير</span><span>👦 أسيد</span></div>
       </div>
       <button class="btn btn-ghost" id="guestBtn" style="width:100%;margin-top:12px;font-size:.9rem">دخول سريع كضيف (بدون حساب)</button>
     </div>
@@ -589,8 +588,12 @@ const Store = {
      phone: رقم جوال الأب (إلزامي للاستعادة) */
   async signUpEmail(name, email, password, phone){
     if(!this.ready) return 'غير مهيّأ';
+    /* البريد اختياري: بدونه نولّد معرّفاً داخلياً لا يُستخدم للبريد，
+       بل ليكون «مفتاح الحساب» الذي يتيح الدخول لاحقاً بالجوال + اسم البطل */
+    const mail = (email||'').trim() ||
+      ('abt-' + Date.now().toString(36) + Math.random().toString(36).slice(2,8) + '@abtal-salah.app');
     const {data, error} = await sb.auth.signUp({
-      email, password, options:{ data:{ full_name:name, kid_name:name, parent_phone:phone } }
+      email: mail, password, options:{ data:{ full_name:name, kid_name:name, parent_phone:this._normPhone(phone) } }
     });
     if(error) return this._msg(error.message);
     const u = data.user;
@@ -602,7 +605,7 @@ const Store = {
       if(pe) console.warn('⚠️ حفظ الاسم:', pe.message);
       /* جوال الأب في جدول الاستعادة — محميّ بـ RLS ولن يظهر في قائمة الشهرة */
       const {error:re} = await sb.from('account_recovery')
-        .upsert({user_id:u.id, username:name, parent_phone:phone}, {onConflict:'user_id'});
+        .upsert({user_id:u.id, username:name, parent_phone:this._normPhone(phone)}, {onConflict:'user_id'});
       if(re) console.warn('⚠️ حفظ جوال الأب:', re.message);
       this.setLocal('kid', name);
     }
@@ -621,15 +624,25 @@ const Store = {
       return 'صيغة البريد الإلكتروني غير صحيحة';
     return m;
   },
+  /* توحيد صيغة الجوال قبل التخزين أو البحث: 00966/+966 → 05XXXXXXXX
+     حتى يتطابق ما يكتبه الأب عند التسجيل مع ما يكتبه عند الدخول لاحقاً */
+  _normPhone(v){
+    let d=String(v||'').trim().replace(/[^\d+]/g,'').replace(/^00/,'+');
+    if(/^\+?966/.test(d)) d='0'+d.replace(/^\+?966/,'');
+    return d;
+  },
   /* ---------- استعادة الحساب: جوال الأب + اسم البطل ---------- */
   async recoverAccount(phone, username){
     if(!this.ready) return 'غير مهيّأ';
     if(!phone||!username) return 'أدخل جوال الأب واسم البطل';
     try{
-      const {data, error} = await sb.rpc('find_account', {p_phone:phone, p_username:username});
+      const {data, error} = await sb.rpc('find_account', {p_phone:this._normPhone(phone), p_username:username});
       if(error) return 'تعذّر البحث: '+error.message;
       const mail = (data && data[0] && data[0].account_email) || '';
       if(!mail) return 'لم نجد حساباً بهذا الجوال واسم البطل';
+      /* حسابات أُنشئت بدون بريد: بريد داخلي لا يصلح لاستقبال الرسائل */
+      if(mail.toLowerCase().endsWith('@abtal-salah.app'))
+        return 'حسابك أُنشئ بدون بريد إلكتروني، فلا يمكن إرسال رابط الاستعادة. ادخل بالجوال واسم البطل وكلمة المرور (وإذا نسيت كلمة المرور فلا يمكن إعادة تعيينها بدون بريد).';
       /* نُرسل رابط إعادة التعيين إلى بريد الحساب — فالوصول للبريد شرط ثانٍ */
       const {error:re} = await sb.auth.resetPasswordForEmail(mail, {
         redirectTo: location.origin + location.pathname
@@ -652,12 +665,12 @@ const Store = {
       return data||[];
     }catch(e){ return []; }
   },
-  async signInEmail(email, password){
+  async signInEmail(email, password, viaPhone){
     if(!this.ready) return 'غير مهيّأ';
     const {data, error} = await sb.auth.signInWithPassword({email, password});
     if(error){
       const m = (error.message||'').toLowerCase();
-      if(m.includes('invalid login')) return 'البريد أو كلمة المرور غير صحيحة';
+      if(m.includes('invalid login')) return viaPhone ? 'اسم البطل أو كلمة المرور غير صحيحة' : 'البريد أو كلمة المرور غير صحيحة';
       if(m.includes('email not confirmed')) return 'لم يُؤكَّد البريد بعد — تحقق من بريدك';
       return error.message;
     }
@@ -669,6 +682,19 @@ const Store = {
       if(row && row.kid_name) this.setLocal('kid', row.kid_name);
     }catch(e){}
     return null;
+  },
+  /* ---------- الدخول بالجوال + اسم البطل + كلمة المرور ----------
+     يعمل لكل الحسابات: نبحث بالجوال والاسم في جدول الاستعادة لنجد
+     بريد الحساب (حقيقي أو داخلي) ثم نفتح الجلسة بكلمة المرور. */
+  async signInPhoneLogin(phone, name, password){
+    if(!this.ready) return 'غير مهيّأ';
+    try{
+      const {data, error} = await sb.rpc('find_account', {p_phone:this._normPhone(phone), p_username:name});
+      if(error) return 'تعذّر البحث عن الحساب: '+error.message;
+      const mail=(data && data[0] && data[0].account_email) || '';
+      if(!mail) return 'لم نجد حساباً بهذا الجوال واسم البطل';
+      return await this.signInEmail(mail, password, true);
+    }catch(e){ return 'خطأ شبكة أثناء الدخول'; }
   },
   /* اسم اللاعب الحالي: من البريد إن لم يكن هناك اسم محفوظ */
   displayName(){
@@ -948,7 +974,7 @@ function renderAuth(){
    ============================================================ */
 function openAuthModal(which){
   const m=document.getElementById('authModal'); if(!m) return;
-  m.hidden=false; setAuthTab(which||'login'); authMsg('');
+  m.hidden=false; setAuthTab(which||'login'); authMsg(''); syncLoginMode();
   const first=document.getElementById(which==='signup'?'signupName':'loginEmail');
   if(first) setTimeout(()=>{try{first.focus()}catch(e){}},60);
 }
@@ -985,12 +1011,37 @@ addEventListener('keydown',e=>{ if(e.key==='Escape') closeAuthModal(); });
 document.getElementById('tabLogin').onclick=()=>setAuthTab('login');
 document.getElementById('tabSignup').onclick=()=>setAuthTab('signup');
 
+/* تبديل إظهار حقل «اسم البطل» تلقائياً: يظهر فقط عند إدخال جوال (بدون @) */
+function syncLoginMode(){
+  const inp=document.getElementById('loginEmail'), fld=document.getElementById('loginNameFld');
+  if(!inp||!fld) return;
+  const v=inp.value.trim();
+  fld.hidden = v==='' || v.indexOf('@')!==-1;
+}
+document.getElementById('loginEmail').addEventListener('input',syncLoginMode);
+
 document.getElementById('loginGo').onclick=async function(){
-  const em=document.getElementById('loginEmail').value.trim();
+  const idv=document.getElementById('loginEmail').value.trim();
   const pw=document.getElementById('loginPass').value;
-  if(!em||!pw){ authMsg('أدخل البريد وكلمة المرور','err'); return; }
-  this.disabled=true; this.textContent='جارٍ الدخول…';
-  const err=await Store.signInEmail(em,pw);
+  if(!idv||!pw){ authMsg('أدخل البريد (أو الجوال) وكلمة المرور','err'); return; }
+  let err;
+  if(idv.indexOf('@')!==-1){
+    /* إدخال بريدي: دخول مباشر */
+    this.disabled=true; this.textContent='جارٍ الدخول…';
+    err=await Store.signInEmail(idv,pw);
+  }else{
+    /* إدخال جوالي: نبحث بالجوال + اسم البطل لنجد البريد الداخلي للحساب */
+    const nm=document.getElementById('loginName').value.trim();
+    if(!validPhone(idv)){ authMsg('رقم الجوال غير صحيح — مثال: 0512345678','err'); return; }
+    if(!nm){
+      document.getElementById('loginNameFld').hidden=false;
+      authMsg('اكتب اسم البطل أيضاً لتسجيل الدخول بالجوال','err');
+      document.getElementById('loginName').focus();
+      return;
+    }
+    this.disabled=true; this.textContent='جارٍ الدخول…';
+    err=await Store.signInPhoneLogin(idv,nm,pw);
+  }
   this.disabled=false; this.textContent='دخول ▶';
   if(err){ authMsg(err,'err'); return; }
   authMsg('تم الدخول بنجاح!','ok');
@@ -1013,7 +1064,7 @@ document.getElementById('signupGo').onclick=async function(){
   if(!nm){ authMsg('اكتب اسم البطل أولاً','err'); return; }
   if(!ph){ authMsg('رقم جوال الأب إلزامي — لاستعادة الحساب عند فقدان كلمة المرور','err'); return; }
   if(!validPhone(ph)){ authMsg('رقم الجوال غير صحيح — مثال: 0512345678','err'); return; }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ authMsg('صيغة البريد غير صحيحة','err'); return; }
+  if(em && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ authMsg('صيغة البريد غير صحيحة','err'); return; }
   if(pw.length<6){ authMsg('كلمة المرور 6 أحرف على الأقل (يختارها البطل)','err'); return; }
   this.disabled=true; this.textContent='جارٍ الإنشاء…';
   const err=await Store.signUpEmail(nm,em,pw,ph);
