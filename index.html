@@ -363,7 +363,7 @@ footer .hearts{font-size:1.2rem}
 <button class="top-btn" id="topBtn" aria-label="الرجوع إلى أعلى الصفحة">⬆️</button>
 
 <!-- ===== Supabase: مكتبة العميل الرسمية ===== -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script>
 /* ============================================================
@@ -376,15 +376,26 @@ footer .hearts{font-size:1.2rem}
       لأن جداولنا محمية بسياسة RLS فلا يستطيع أحد قراءة بيانات
       غيره. أما مفتاح service_role فلا يُوضع في المتصفح أبداً.
    ============================================================ */
-const SB_URL = "___ضع_رابط_مشروعك_هنا___";
-const SB_KEY = "___ضع_المفتاح_العام_هنا___";
+const SB_URL = "https://wbaesnsyfkpmmpzmgmvg.supabase.co";
+const SB_KEY = "sb_publishable_cm2HSnkeO6_eYGnSpyuO1g_7cLdzxoU";
 
-/* هل تم إدخال بيانات الاتصال فعلاً؟ */
-const SB_READY = !SB_URL.includes("___") && !SB_KEY.includes("___") && SB_URL.startsWith("http");
-const sb = SB_READY ? supabase.createClient(SB_URL, SB_KEY) : null;
+/* هل المكتبة محمّلة + هل تم إدخال بيانات الاتصال فعلاً؟
+   نتحقق من وجود المكتبة حتى لو فشل تحميل الـ CDN — لا يجب أن ينهار الموقع */
+const SB_LIB_OK     = typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function';
+const SB_CONFIG_OK  = !SB_URL.includes("___") && !SB_KEY.includes("___") && SB_URL.startsWith("http");
+let sb = null;
+if(SB_LIB_OK && SB_CONFIG_OK){
+  try{ sb = window.supabase.createClient(SB_URL, SB_KEY); }
+  catch(e){ sb = null; console.warn("⚠️ فشل إنشاء عميل Supabase:", e && e.message); }
+}
+/* نعتبر الوضع جاهزاً فقط إذا أُنشئ العميل فعلاً */
+const SB_READY = !!sb;
 
 if(!SB_READY){
-  console.warn("⚙️ Supabase غير مُهيّأ: الموقع يعمل الآن بوضع محلي فقط (localStorage).");
+  console.warn("⚙️ Supabase غير مُهيّأ (" +
+               (!SB_LIB_OK        ? "تعذّر تحميل المكتبة من CDN" :
+                !SB_CONFIG_OK     ? "لم تُدخل بيانات الاتصال" : "فشل إنشاء العميل") +
+               ") — الموقع يعمل الآن بوضع محلي فقط (localStorage).");
 }
 
 /* ============================================================

@@ -143,15 +143,15 @@ create trigger on_auth_user_created
 -- ------------------------------------------------------------
 -- 7) تقييد طول الملاحظات وتنظيف المدخلات
 -- ------------------------------------------------------------
-drop constraint if exists notes_body_len on public.notes;
+alter table public.notes drop constraint if exists notes_body_len;
 alter table public.notes
   add constraint notes_body_len check (char_length(body) <= 2000);
 
-drop constraint if exists notes_title_len on public.notes;
+alter table public.notes drop constraint if exists notes_title_len;
 alter table public.notes
   add constraint notes_title_len check (char_length(title) <= 120);
 
-drop constraint if exists progress_stars_max on public.progress;
+alter table public.progress drop constraint if exists progress_stars_max;
 alter table public.progress
   add constraint progress_stars_max check (stars <= 100000);
 

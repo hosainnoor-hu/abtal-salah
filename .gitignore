@@ -1,0 +1,5 @@
+# بيانات سرية — لا تُرفع إلى Git أبداً
+supabase_secrets.local.md
+.env
+.env.local
+*.local.md
