@@ -212,6 +212,29 @@ revoke all on function public.find_account(text, text) from public, anon;
 grant execute on function public.find_account(text, text) to anon, authenticated;
 
 -- ------------------------------------------------------------
+-- 9b) الدخول باسم المستخدم: الاسم المسجَّل (اسم البطل) → بريد الحساب
+--     يسمح بتسجيل الدخول بالاسم + كلمة المرور بدل البريد مباشرةً.
+--     تُجرَّب كل النتائج عند تشابه الأسماء حتى تنجح كلمة المرور الصحيحة.
+-- ------------------------------------------------------------
+create or replace function public.find_emails_by_username(p_username text)
+returns table (account_email text)
+language sql
+stable
+security definer set search_path = public
+as $$
+  select u.email::text as account_email
+  from public.account_recovery r
+  join auth.users u on u.id = r.user_id
+  where nullif(trim(p_username),'') is not null
+    and u.email is not null and u.email <> ''
+    and lower(trim(r.username)) = lower(trim(p_username))
+  limit 5;
+$$;
+
+revoke all on function public.find_emails_by_username(text) from public, anon;
+grant execute on function public.find_emails_by_username(text) to anon, authenticated;
+
+-- ------------------------------------------------------------
 -- 10) قائمة الشهرة — تعرض الاسم والنجوم فقط
 --     لا تحتوي على: جوال، بريد، ملاحظات، خطوات وضوء، صلوات، ولا user_id
 -- ------------------------------------------------------------
