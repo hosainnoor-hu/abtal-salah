@@ -410,6 +410,9 @@ footer .hearts{font-size:1.2rem}
         <button id="tabSignup">حساب جديد</button>
       </div>
 
+      <!-- حساب التجربة — دخول فوري بدون تسجيل (للاستكشاف) -->
+      <button class="btn btn-green" id="demoBtn" style="width:100%;margin:2px 0 12px">🧪 دخول فوري بحساب التجربة (بدون تسجيل)</button>
+
       <!-- تسجيل الدخول -->
       <div id="formLogin">
         <div class="fld"><label for="loginUser">اسم المستخدم</label>
@@ -450,7 +453,6 @@ footer .hearts{font-size:1.2rem}
       <div class="auth-note">
         لكل بطل حسابه الخاص وتقدّمه وملاحظاته لا يشاركه بها أحد 🌟
       </div>
-      <button class="btn btn-ghost" id="guestBtn" style="width:100%;margin-top:12px;font-size:.9rem">دخول سريع كضيف (بدون حساب)</button>
     </div>
   </div>
 </div>
@@ -576,12 +578,6 @@ const Store = {
       const {data} = await sb.auth.getSession();
       if(data?.session?.user){ this.user = data.session.user; await this.pull(); }
     }catch(e){ /* لا إنترنت — نكمل بالمحلي */ }
-  },
-
-  async signIn(){
-    if(!this.ready) return 'غير مهيّأ';
-    const {error} = await sb.auth.signInAnonymously();
-    return error ? error.message : null;
   },
 
   /* ---------- حساب بريد + كلمة مرور (لكل بطل حسابه) ----------
@@ -1074,17 +1070,21 @@ document.getElementById('recoverGo').onclick=async function(){
   }
 };
 
-document.getElementById('guestBtn').onclick=async function(){
+/* حساب التجربة: دخول فوري بدون تسجيل — للاستكشاف.
+   حساب مشترك بين الزوار؛ تقدّمه وملاحظاته تُشارك بينهم (بيانات تجريبية فقط). */
+document.getElementById('demoBtn').onclick=async function(){
   if(Store.user){
-    if(!confirm('لديك حساب مسجّل. الدخول كضيف سيتجاوز حسابك الحالي. متابعة؟')) return;
+    if(!confirm('أنت داخل بحساب. الدخول بحساب التجربة سيتجاوزه. متابعة؟')) return;
     await Store.signOut();
   }
   this.disabled=true; this.textContent='جارٍ الدخول…';
-  const err=await Store.signIn();
-  this.disabled=false; this.textContent='دخول سريع كضيف (بدون حساب)';
+  const err=await Store.signInUsername('تجربة','Demo1234');
+  this.disabled=false; this.textContent='🧪 دخول فوري بحساب التجربة (بدون تسجيل)';
   if(err){ authMsg(err,'err'); return; }
-  closeAuthModal(); renderAuth(); renderNoteTabs();
-  speak('أهلاً بك ضيفنا');
+  authMsg('أهلاً بك في وضع التجربة! 🧪','ok');
+  closeAuthModal(); /* إغلاق فوري — جلب بيانات السحابة في الخلفية */
+  afterAuthOK('تجربة'); /* اسم التجربة ثابت — يظهر فوراً دون انتظار السحابة */
+  speak('أهلاً بك في وضع التجربة');
 };
 const gateOpenBtn=document.getElementById('gateBtn');
 if(gateOpenBtn) gateOpenBtn.onclick=()=>openAuthModal('login');
