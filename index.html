@@ -28,6 +28,7 @@
   --radius:22px; --shadow:0 10px 30px rgba(2,136,209,.14);
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important} /* إلزامي: بدونها تلغى خاصية hidden بقواعد display في CSS */
 html{scroll-behavior:smooth}
 body{
   margin:0; font-family:'Cairo','Tajawal',system-ui,sans-serif;
@@ -1026,7 +1027,7 @@ document.getElementById('loginGo').onclick=async function(){
   if(err){ authMsg(err,'err'); return; }
   authMsg('تم الدخول بنجاح!','ok');
   closeAuthModal(); /* إغلاق فوري — جلب بيانات السحابة يتم في الخلفية */
-  afterAuthOK(Store.get('kid',''));
+  afterAuthOK(''); /* الاسم يأتي من السحابة عبر pull() — لا نعيد حفظ اسم الجهاز القديم */
 };
 
 /* تحقق من صيغة رقم جوال الأب (سعودي أو دولي) */
